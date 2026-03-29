@@ -270,6 +270,76 @@ footer {
 .footer-logo { font-family: 'Lora', serif; font-size: 1.1rem; color: white; margin-bottom: 0.5rem; }
 .footer-sub { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.6; }
 
+/* NYT CLASSICS */
+.nyt-section {
+  padding: 6rem 2rem;
+  background: var(--bark);
+  position: relative;
+  overflow: hidden;
+}
+.nyt-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 70% at 80% 50%, rgba(45,181,132,0.07) 0%, transparent 60%);
+  pointer-events: none;
+}
+.nyt-inner { max-width: 1100px; margin: 0 auto; }
+.nyt-section .section-label { color: var(--green-mid); }
+.nyt-section .section-title { color: white; }
+.nyt-section .section-sub { color: rgba(255,255,255,0.5); }
+.nyt-scroll {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+.nyt-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 16px;
+  padding: 1.5rem 1.25rem;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s, border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.nyt-card:hover {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(45,181,132,0.4);
+  transform: translateY(-3px);
+  text-decoration: none;
+}
+.nyt-card-emoji { font-size: 28px; }
+.nyt-card-title { font-family: 'Lora', serif; font-size: 14px; font-weight: 600; color: white; line-height: 1.35; }
+.nyt-card-meta { font-size: 12px; color: rgba(255,255,255,0.4); }
+.nyt-card-badge {
+  display: inline-block;
+  font-size: 10px; font-weight: 500;
+  padding: 2px 8px; border-radius: 100px;
+  margin-top: auto;
+  width: fit-content;
+}
+.nyt-card-badge.safe { background: rgba(26,140,101,0.2); color: #4fd4a4; }
+.nyt-card-badge.caution { background: rgba(212,135,42,0.2); color: #e5a84a; }
+.nyt-cta {
+  margin-top: 2.5rem;
+  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+}
+.nyt-cta a {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green); color: white;
+  padding: 12px 24px; border-radius: 100px;
+  font-size: 14px; font-weight: 500; text-decoration: none;
+  transition: all 0.2s;
+}
+.nyt-cta a:hover { background: #0d6b4a; transform: translateY(-1px); text-decoration: none; }
+.nyt-cta-note { font-size: 13px; color: rgba(255,255,255,0.35); }
+@media (max-width: 768px) {
+  .nyt-scroll { grid-template-columns: repeat(2, 1fr); }
+  .nyt-scroll .nyt-card:last-child { grid-column: span 2; }
+}
+
 /* ANIMATIONS */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
@@ -324,7 +394,7 @@ footer {
     </div>
     <div class="hero-stats">
       <div>
-        <div class="stat-num">24+</div>
+        <div class="stat-num">29+</div>
         <div class="stat-label">FODMAP-safe recipes</div>
       </div>
       <div class="stat-divider"></div>
@@ -356,7 +426,7 @@ footer {
     <div class="feature-card reveal">
       <div class="feature-icon">🍽️</div>
       <div class="feature-title">Recipe library</div>
-      <p class="feature-desc">Browse 24+ tested recipes across breakfast, lunch, dinner and snacks. Every single one is IBS-friendly and clearly labelled. Free forever.</p>
+      <p class="feature-desc">Browse 29+ tested recipes across breakfast, lunch, dinner and snacks — including 5 NYT Classics adapted for IBS. Every single one is FODMAP-friendly and clearly labelled. Free forever.</p>
     </div>
     <div class="feature-card reveal" style="border-color: var(--green); position:relative;">
       <div style="position:absolute;top:-12px;left:1.5rem;background:var(--green);color:white;font-size:11px;font-weight:500;padding:3px 10px;border-radius:100px">⭐ Premium</div>
@@ -375,6 +445,53 @@ footer {
       <div class="feature-icon">📅</div>
       <div class="feature-title">Meal planner & more</div>
       <p class="feature-desc">Weekly meal planner, saved favourites and shopping list export are on the roadmap. Unlock now at €1.99 and get access as features launch.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NYT CLASSICS -->
+<section class="nyt-section">
+  <div class="nyt-inner">
+    <div class="reveal">
+      <div class="section-label">NYT Classics</div>
+      <h2 class="section-title">Your favourite classics,<br>made IBS-friendly</h2>
+      <p class="section-sub">Five of the New York Times' most beloved recipes — adapted with simple low-FODMAP swaps. Same dishes, none of the triggers.</p>
+    </div>
+    <div class="nyt-scroll reveal">
+      <a href="app.html" class="nyt-card">
+        <div class="nyt-card-emoji">🍗</div>
+        <div class="nyt-card-title">Buttermilk-Brined Roast Chicken</div>
+        <div class="nyt-card-meta">Dinner · 1 hr 15 min</div>
+        <span class="nyt-card-badge safe">FODMAP safe</span>
+      </a>
+      <a href="app.html" class="nyt-card">
+        <div class="nyt-card-emoji">🍞</div>
+        <div class="nyt-card-title">No-Knead Bread</div>
+        <div class="nyt-card-meta">Sides · 45 min + overnight</div>
+        <span class="nyt-card-badge caution">Watch portions</span>
+      </a>
+      <a href="app.html" class="nyt-card">
+        <div class="nyt-card-emoji">🍝</div>
+        <div class="nyt-card-title">Spaghetti alla Carbonara</div>
+        <div class="nyt-card-meta">Dinner · 20 min</div>
+        <span class="nyt-card-badge safe">FODMAP safe</span>
+      </a>
+      <a href="app.html" class="nyt-card">
+        <div class="nyt-card-emoji">🥗</div>
+        <div class="nyt-card-title">Sheet-Pan Chicken & Garlic Yogurt</div>
+        <div class="nyt-card-meta">Dinner · 40 min</div>
+        <span class="nyt-card-badge safe">FODMAP safe</span>
+      </a>
+      <a href="app.html" class="nyt-card">
+        <div class="nyt-card-emoji">🫐</div>
+        <div class="nyt-card-title">Original Plum Torte</div>
+        <div class="nyt-card-meta">Dessert · 50 min</div>
+        <span class="nyt-card-badge caution">Watch portions</span>
+      </a>
+    </div>
+    <div class="nyt-cta reveal">
+      <a href="app.html">Open all recipes →</a>
+      <span class="nyt-cta-note">Free · No sign-up needed</span>
     </div>
   </div>
 </section>
