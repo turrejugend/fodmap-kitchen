@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free FODMAP Recipes & IBS Ingredient Checker | Gut Friendly</title>
+<meta name="description" content="Browse 24+ free FODMAP-safe recipes for IBS. Instantly check if any ingredient is low FODMAP. Based on Monash University guidelines. No sign-up needed.">
+<meta name="keywords" content="FODMAP recipes, low FODMAP diet, IBS friendly recipes, FODMAP ingredient checker, IBS diet app, low FODMAP food list, FODMAP safe foods, irritable bowel syndrome recipes">
+<link rel="canonical" href="https://gutfriendly.app/fodmap-recipes">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1D9E75">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Free FODMAP Recipes & IBS Ingredient Checker | Gut Friendly">
+<meta property="og:description" content="24+ FODMAP-safe recipes and an instant ingredient checker for IBS. Free to use, no sign-up needed.">
+<meta property="og:url" content="https://gutfriendly.app/fodmap-recipes">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://gutfriendly.app/hero.jpg">
+
+<!-- Schema.org structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Gut Friendly",
+  "description": "Free FODMAP recipe app and ingredient checker for people with IBS",
+  "url": "https://gutfriendly.app",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR"
+  },
+  "featureList": [
+    "24+ FODMAP-safe recipes",
+    "90+ ingredient FODMAP checker",
+    "IBS-friendly meal ideas",
+    "Based on Monash University FODMAP guidelines"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the FODMAP diet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The FODMAP diet is a clinically proven approach developed by Monash University to manage IBS symptoms. FODMAP stands for Fermentable Oligosaccharides, Disaccharides, Monosaccharides and Polyols — short-chain carbohydrates that are poorly absorbed in the gut and can trigger symptoms like bloating, cramps and diarrhoea in people with IBS."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which foods are FODMAP safe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FODMAP-safe foods include chicken, fish, eggs, rice, quinoa, potatoes, carrots, zucchini, spinach, tomatoes, strawberries, blueberries, firm bananas, lactose-free dairy, hard cheeses, oat milk, olive oil, tamari and most fresh herbs. Our free ingredient checker lists 90+ foods with detailed FODMAP guidance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which foods should you avoid on a FODMAP diet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "High FODMAP foods to avoid include garlic, onion, wheat bread, regular pasta, cow's milk, apples, pears, watermelon, cauliflower, mushrooms, asparagus, kidney beans and foods containing high-fructose corn syrup or garlic/onion powder."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Gut Friendly free to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — Gut Friendly is free to use with no sign-up required. You can browse all 24+ FODMAP-safe recipes for free. The ingredient checker and library unlock with a one-time purchase of €1.99 with no subscription."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the FODMAP diet effective for IBS?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The low FODMAP diet developed by Monash University has been clinically shown to reduce IBS symptoms in up to 75% of people who follow it. It works by eliminating fermentable carbohydrates that trigger gut symptoms, then systematically reintroducing them to identify personal triggers."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green: #1a8c65; --green-light: #e8f7f1; --green-dark: #0d4f38;
+  --cream: #faf8f3; --cream2: #f2ede3;
+  --bark: #3d3428; --bark2: #6b5e4e; --bark3: #9c8e80;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--bark); line-height: 1.7; }
+a { color: var(--green); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(250,248,243,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(61,52,40,0.08);
+}
+.nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.nav-logo-text { font-family: 'Lora', serif; font-size: 17px; font-weight: 600; color: var(--bark); }
+.nav-cta { background: var(--green); color: white; padding: 8px 20px; border-radius: 100px; font-size: 13px; font-weight: 500; text-decoration: none; }
+.nav-cta:hover { background: var(--green-dark); text-decoration: none; }
+
+.page { max-width: 760px; margin: 0 auto; padding: 6rem 1.5rem 4rem; }
+
+h1 { font-family: 'Lora', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 600; color: var(--bark); line-height: 1.2; margin-bottom: 1rem; }
+h2 { font-family: 'Lora', serif; font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 600; color: var(--bark); margin: 2.5rem 0 0.75rem; line-height: 1.25; }
+h3 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--bark); margin: 1.5rem 0 0.5rem; }
+p { font-size: 15px; color: var(--bark2); margin-bottom: 1rem; font-weight: 300; }
+.lead { font-size: 17px; color: var(--bark2); margin-bottom: 2rem; font-weight: 300; line-height: 1.8; }
+
+.cta-box {
+  background: var(--green-light); border: 1px solid var(--green);
+  border-radius: 16px; padding: 1.5rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem; margin: 2rem 0;
+}
+.cta-box-text { font-size: 15px; color: var(--green-dark); font-weight: 500; }
+.cta-box-sub { font-size: 13px; color: var(--green); margin-top: 2px; }
+.btn-green { background: var(--green); color: white; padding: 12px 24px; border-radius: 100px; font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+.btn-green:hover { background: var(--green-dark); text-decoration: none; }
+
+.food-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin: 1.5rem 0; }
+.food-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: white; border: 1px solid rgba(61,52,40,0.08);
+  border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--bark);
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-safe { background: var(--green); }
+.dot-caution { background: #d4872a; }
+.dot-avoid { background: #c0392b; }
+
+.recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 1.5rem 0; }
+.recipe-card {
+  background: white; border: 1px solid rgba(61,52,40,0.08);
+  border-radius: 14px; padding: 1rem; text-decoration: none;
+  transition: border-color 0.15s, transform 0.1s; display: block;
+}
+.recipe-card:hover { border-color: var(--green); transform: translateY(-2px); text-decoration: none; }
+.recipe-emoji { font-size: 24px; margin-bottom: 6px; }
+.recipe-title { font-size: 13px; font-weight: 500; color: var(--bark); margin-bottom: 3px; line-height: 1.3; }
+.recipe-cat { font-size: 11px; color: var(--bark3); }
+
+.faq { margin: 1rem 0; }
+.faq-item { border-bottom: 1px solid rgba(61,52,40,0.08); padding: 1rem 0; }
+.faq-q { font-size: 15px; font-weight: 500; color: var(--bark); margin-bottom: 0.5rem; }
+.faq-a { font-size: 14px; color: var(--bark2); font-weight: 300; line-height: 1.7; }
+
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--bark3); margin: 0.5rem 0 1.5rem; align-items: center; }
+.legend span { display: flex; align-items: center; gap: 5px; }
+
+.tag { display: inline-block; background: var(--green-light); color: var(--green-dark); font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 8px; margin-right: 4px; }
+
+footer { text-align: center; padding: 3rem 1.5rem; font-size: 12px; color: var(--bark3); border-top: 1px solid rgba(61,52,40,0.08); margin-top: 4rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <span style="font-size:18px">🌿</span>
+    <span class="nav-logo-text">Gut Friendly</span>
+  </a>
+  <a href="/app.html" class="nav-cta">Open app →</a>
+</nav>
+
+<div class="page">
+
+  <p style="font-size:12px;color:var(--bark3);margin-bottom:0.75rem">
+    <a href="/">Home</a> › FODMAP recipes & IBS guide
+  </p>
+
+  <h1>Free FODMAP Recipes & IBS Ingredient Checker</h1>
+  <p class="lead">Everything you need to eat confidently with IBS — 24+ tested FODMAP-safe recipes, an instant ingredient checker, and a complete low FODMAP food list. Free to use, no sign-up required.</p>
+
+  <div class="cta-box">
+    <div>
+      <div class="cta-box-text">🌿 Try Gut Friendly — free FODMAP app</div>
+      <div class="cta-box-sub">24+ recipes · 90+ ingredients checked · Works on any phone</div>
+    </div>
+    <a href="/app.html" class="btn-green">Open free app →</a>
+  </div>
+
+  <h2>What is the FODMAP diet?</h2>
+  <p>The low FODMAP diet is a clinically proven approach to managing irritable bowel syndrome (IBS), developed by researchers at Monash University in Australia. FODMAP stands for <strong>Fermentable Oligosaccharides, Disaccharides, Monosaccharides and Polyols</strong> — a group of short-chain carbohydrates that are poorly absorbed in the small intestine.</p>
+  <p>When unabsorbed FODMAPs reach the large intestine, they are fermented by gut bacteria, producing gas and drawing water into the bowel. For people with IBS, this triggers symptoms including bloating, abdominal pain, cramping, diarrhoea and constipation.</p>
+  <p>Studies show the low FODMAP diet reduces IBS symptoms in up to 75% of people who follow it, making it one of the most effective dietary interventions for IBS available.</p>
+
+  <h2>FODMAP safe foods — what you can eat</h2>
+  <p>Contrary to popular belief, the low FODMAP diet is not restrictive — there's a huge range of delicious, satisfying foods that are completely safe. Here are some of the most common FODMAP-safe ingredients:</p>
+
+  <div class="legend">
+    <span><span class="dot dot-safe"></span> Safe</span>
+    <span><span class="dot dot-caution"></span> Caution / portion dependent</span>
+    <span><span class="dot dot-avoid"></span> Avoid</span>
+  </div>
+
+  <div class="food-grid">
+    <div class="food-pill"><span class="dot dot-safe"></span>Chicken</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Salmon</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Eggs</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>White rice</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Quinoa</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Potato</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Carrot</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Zucchini</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Spinach</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Tomato</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Strawberry</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Blueberry</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Firm banana</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Lactose-free milk</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Cheddar cheese</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Feta cheese</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Oat milk</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Olive oil</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Garlic-infused oil</div>
+    <div class="food-pill"><span class="dot dot-safe"></span>Tamari soy sauce</div>
+    <div class="food-pill"><span class="dot dot-caution"></span>Rolled oats</div>
+    <div class="food-pill"><span class="dot dot-caution"></span>Avocado</div>
+    <div class="food-pill"><span class="dot dot-caution"></span>Almonds</div>
+    <div class="food-pill"><span class="dot dot-caution"></span>Chickpeas (rinsed)</div>
+    <div class="food-pill"><span class="dot dot-avoid"></span>Garlic</div>
+    <div class="food-pill"><span class="dot dot-avoid"></span>Onion</div>
+    <div class="food-pill"><span class="dot dot-avoid"></span>Wheat bread</div>
+    <div class="food-pill"><span class="dot dot-avoid"></span>Apple</div>
+    <div class="food-pill"><span class="dot dot-avoid"></span>Cauliflower</div>
+    <div class="food-pill"><span class="dot dot-avoid"></span>Mushrooms</div>
+  </div>
+
+  <p>Want to check a specific ingredient? Use our <a href="/app.html">free FODMAP ingredient checker</a> which covers 90+ foods with detailed portion guidance and safe alternatives.</p>
+
+  <h2>FODMAP-safe recipes for IBS</h2>
+  <p>All recipes in the Gut Friendly app are tested and FODMAP-safe. Here's a sample of what's available — tap any recipe to open it in the app:</p>
+
+  <div class="recipe-grid">
+    <a href="/app.html" class="recipe-card"><div class="recipe-emoji">🍳</div><div class="recipe-title">Scrambled eggs with spinach</div><div class="recipe-cat">Breakfast · 10 min</div></a>
+    <a href="/app.html" class="recipe-card"><div class="recipe-emoji">🥗</div><div class="recipe-title">Quinoa tabbouleh</div><div class="recipe-cat">Lunch · 20 min</div></a>
+    <a href="/app.html" class="recipe-card"><div class="recipe-emoji">🐟</div><div class="recipe-title">Teriyaki salmon with rice</div><div class="recipe-cat">Dinner · 25 min</div></a>
+    <a href="/app.html" class="recipe-card"><div class="recipe-emoji">🍛</div><div class="recipe-title">Chicken & rice curry</div><div class="recipe-cat">Dinner · 35 min</div></a>
+    <a href="/app.html" class="recipe-card"><div class="recipe-emoji">🥞</div><div class="recipe-title">Rice flour banana pancakes</div><div class="recipe-cat">Breakfast · 20 min</div></a>
+    <a href="/app.html" class="recipe-card"><div class="recipe-emoji">🍝</div><div class="recipe-title">Beef bolognese (GF pasta)</div><div class="recipe-cat">Dinner · 40 min</div></a>
+    <a href="/app.html" class="recipe-card"><div class="recipe-emoji">🥙</div><div class="recipe-title">Rice paper rolls with prawn</div><div class="recipe-cat">Lunch · 25 min</div></a>
+    <a href="/app.html" class="recipe-card"><div class="recipe-emoji">🫐</div><div class="recipe-title">Berry & yoghurt parfait</div><div class="recipe-cat">Snack · 5 min</div></a>
+  </div>
+
+  <a href="/app.html" class="btn-green" style="display:inline-block;margin:0.5rem 0 2rem">See all 24+ recipes →</a>
+
+  <h2>Common FODMAP mistakes to avoid</h2>
+
+  <h3>Using garlic and onion powder</h3>
+  <p>Many people switch from fresh garlic and onion to powders thinking it's safer. It isn't — garlic and onion powder are highly concentrated in fructans and can trigger symptoms even in tiny amounts hidden in spice blends. Use garlic-infused oil instead, which gives the flavour without the FODMAPs.</p>
+
+  <h3>Ignoring portion sizes</h3>
+  <p>FODMAP content is dose-dependent. Some foods like rolled oats, avocado and broccoli are safe in small portions but trigger symptoms in larger amounts. Always pay attention to serving sizes, especially for caution-rated foods.</p>
+
+  <h3>Assuming "gluten-free" means FODMAP-safe</h3>
+  <p>Gluten-free and low FODMAP are not the same thing. Many gluten-free products contain high-FODMAP ingredients like apple juice, honey or inulin. Always check the full ingredient list.</p>
+
+  <h3>Not rinsing canned legumes</h3>
+  <p>Canned chickpeas and lentils can be low FODMAP in small portions — but only if thoroughly rinsed. The canning liquid contains FODMAPs that leach from the legumes. Drain and rinse well before using.</p>
+
+  <h2>Frequently asked questions</h2>
+  <div class="faq">
+    <div class="faq-item">
+      <div class="faq-q">How long does the FODMAP elimination phase last?</div>
+      <div class="faq-a">The elimination phase typically lasts 2–6 weeks, during which all high-FODMAP foods are avoided. After that, foods are reintroduced one at a time to identify personal triggers. Always do this with guidance from a registered dietitian if possible.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I eat out on a FODMAP diet?</div>
+      <div class="faq-a">Yes, with some planning. Safe options at most restaurants include grilled meat or fish with rice or plain potatoes, salads without dressings containing garlic or onion, and sushi (with tamari instead of regular soy sauce). Always ask about ingredients when in doubt.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is garlic-infused oil really FODMAP safe?</div>
+      <div class="faq-a">Yes — FODMAPs are water soluble, not oil soluble. This means the fructans in garlic don't transfer into the oil during infusion. Commercially prepared garlic-infused oil is safe, as is homemade as long as no garlic pieces remain in the oil.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What's the difference between FODMAP safe and FODMAP free?</div>
+      <div class="faq-a">FODMAP safe means a food contains FODMAPs at low enough levels that most people with IBS can tolerate a normal serving without symptoms. FODMAP free means a food contains no measurable FODMAPs. Most foods labelled as safe still contain trace amounts.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do I have to follow the FODMAP diet forever?</div>
+      <div class="faq-a">No. The low FODMAP diet is a diagnostic tool, not a permanent lifestyle. After the elimination and reintroduction phases, most people find they can tolerate many foods in normal portions — they just need to avoid or limit their specific triggers.</div>
+    </div>
+  </div>
+
+  <div class="cta-box" style="margin-top:3rem">
+    <div>
+      <div class="cta-box-text">Start eating well with IBS today</div>
+      <div class="cta-box-sub">Free to use · 24+ recipes · No sign-up needed</div>
+    </div>
+    <a href="/app.html" class="btn-green">Open Gut Friendly →</a>
+  </div>
+
+</div>
+
+<footer>
+  <div style="margin-bottom:4px">🌿 <strong>Gut Friendly</strong> — IBS-friendly recipes & ingredient checker</div>
+  <div>Based on Monash University FODMAP guidelines. Always consult your dietitian for personal medical advice.</div>
+  <div style="margin-top:8px"><a href="/">Home</a> · <a href="/app.html">Open app</a></div>
+</footer>
+
+</body>
+</html>

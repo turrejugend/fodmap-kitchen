@@ -1,4 +1,4 @@
-const CACHE = 'fodmap-kitchen-v1';
+const CACHE = 'gut-friendly-v1';
 const FILES = [
   '/app.html',
   '/manifest.json',

@@ -1,6 +1,6 @@
 {
-  "name": "FODMAP Kitchen",
-  "short_name": "FODMAP Kitchen",
+  "name": "Gut Friendly",
+  "short_name": "Gut Friendly",
   "description": "IBS-friendly recipes and ingredient checker",
   "start_url": "/app.html",
   "display": "standalone",
