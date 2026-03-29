@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FODMAP Kitchen — Eat well with IBS</title>
+<meta name="description" content="IBS-friendly recipes and ingredient checker. Know what to eat, feel confident in the kitchen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green: #1a8c65;
+  --green-mid: #2db584;
+  --green-light: #e8f7f1;
+  --green-dark: #0d4f38;
+  --cream: #faf8f3;
+  --cream2: #f2ede3;
+  --bark: #3d3428;
+  --bark2: #6b5e4e;
+  --bark3: #9c8e80;
+  --white: #ffffff;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--bark);
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(250,248,243,0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(61,52,40,0.08);
+}
+.nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.nav-logo-icon { font-size: 20px; }
+.nav-logo-text { font-family: 'Lora', serif; font-size: 17px; font-weight: 600; color: var(--bark); }
+.nav-cta {
+  background: var(--green); color: white;
+  padding: 8px 20px; border-radius: 100px;
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+}
+.nav-cta:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse 60% 80% at 0% 60%, rgba(45,181,132,0.08) 0%, transparent 70%);
+}
+.hero-decor { display: none; }
+.hero-content { position: relative; z-index: 1; max-width: 560px; padding: 8rem 3rem 5rem 3rem; }
+.hero-image-panel {
+  position: relative; height: 100vh; overflow: hidden;
+}
+.hero-image-panel img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center;
+  display: block;
+}
+.hero-image-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, var(--cream) 0%, transparent 20%);
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--green-light); color: var(--green-dark);
+  font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+  padding: 5px 12px; border-radius: 100px;
+  margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
+}
+.hero-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+h1 {
+  font-family: 'Lora', serif;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--bark);
+  margin-bottom: 1.25rem;
+  opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+}
+h1 em { font-style: italic; color: var(--green); }
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 300;
+  color: var(--bark2);
+  line-height: 1.7;
+  max-width: 480px;
+  margin-bottom: 2.5rem;
+  opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
+}
+.hero-actions {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green); color: white;
+  padding: 14px 28px; border-radius: 100px;
+  font-size: 15px; font-weight: 500; text-decoration: none;
+  transition: all 0.2s; box-shadow: 0 4px 20px rgba(26,140,101,0.3);
+}
+.btn-primary:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,140,101,0.35); }
+.btn-primary svg { width: 18px; height: 18px; }
+.hero-note { font-size: 13px; color: var(--bark3); }
+.hero-stats {
+  display: flex; gap: 2rem; margin-top: 3.5rem;
+  opacity: 0; animation: fadeUp 0.7s 0.65s forwards;
+}
+.stat-num { font-family: 'Lora', serif; font-size: 1.8rem; font-weight: 600; color: var(--bark); }
+.stat-label { font-size: 12px; color: var(--bark3); font-weight: 400; margin-top: 2px; }
+.stat-divider { width: 1px; background: var(--cream2); }
+
+/* FEATURES */
+.features {
+  padding: 6rem 2rem;
+  max-width: 1100px; margin: 0 auto;
+}
+.section-label {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--green); margin-bottom: 0.75rem;
+}
+.section-title {
+  font-family: 'Lora', serif;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 600; color: var(--bark);
+  margin-bottom: 1rem; line-height: 1.25;
+}
+.section-sub { font-size: 1rem; color: var(--bark2); font-weight: 300; max-width: 500px; line-height: 1.7; margin-bottom: 3rem; }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.feature-card {
+  background: var(--white);
+  border: 1px solid rgba(61,52,40,0.08);
+  border-radius: 20px; padding: 2rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.feature-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(61,52,40,0.08); }
+.feature-icon {
+  width: 48px; height: 48px; border-radius: 14px;
+  background: var(--green-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 1.25rem;
+}
+.feature-title { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--bark); margin-bottom: 0.5rem; }
+.feature-desc { font-size: 14px; color: var(--bark2); line-height: 1.7; font-weight: 300; }
+
+/* HOW IT WORKS */
+.how {
+  background: var(--bark);
+  padding: 6rem 2rem;
+  position: relative; overflow: hidden;
+}
+.how-inner { max-width: 1100px; margin: 0 auto; }
+.how .section-label { color: var(--green-mid); }
+.how .section-title { color: var(--white); }
+.how .section-sub { color: rgba(255,255,255,0.55); }
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-top: 3rem; }
+.step { position: relative; }
+.step-num {
+  font-family: 'Lora', serif; font-size: 3.5rem; font-weight: 600;
+  color: rgba(255,255,255,0.07); line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.step-title { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: white; margin-bottom: 0.5rem; }
+.step-desc { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.7; font-weight: 300; }
+.step-connector {
+  position: absolute; top: 2rem; right: -1rem;
+  color: rgba(255,255,255,0.15); font-size: 1.5rem;
+}
+
+/* FODMAP EXPLAINER */
+.explainer {
+  padding: 6rem 2rem;
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+}
+.explainer-text .section-title { margin-bottom: 1.25rem; }
+.explainer-text p { font-size: 15px; color: var(--bark2); line-height: 1.8; font-weight: 300; margin-bottom: 1rem; }
+.explainer-visual {
+  background: var(--white);
+  border: 1px solid rgba(61,52,40,0.08);
+  border-radius: 24px; padding: 2rem;
+  box-shadow: 0 8px 40px rgba(61,52,40,0.06);
+}
+.fodmap-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0; border-bottom: 1px solid rgba(61,52,40,0.06);
+  font-size: 14px;
+}
+.fodmap-row:last-child { border-bottom: none; }
+.fodmap-name { color: var(--bark); font-weight: 400; }
+.fodmap-status { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot-safe { background: var(--green); }
+.dot-caution { background: #d4872a; }
+.dot-avoid { background: #c0392b; }
+.label-safe { color: var(--green); }
+.label-caution { color: #d4872a; }
+.label-avoid { color: #c0392b; }
+
+/* PRICING */
+.pricing {
+  background: var(--cream2);
+  padding: 6rem 2rem;
+}
+.pricing-inner { max-width: 700px; margin: 0 auto; text-align: center; }
+.pricing-inner .section-sub { margin: 0 auto 3rem; }
+.pricing-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: left; }
+.pricing-card {
+  background: var(--white);
+  border: 1px solid rgba(61,52,40,0.1);
+  border-radius: 20px; padding: 2rem;
+}
+.pricing-card.featured { border: 2px solid var(--green); }
+.pricing-badge {
+  display: inline-block; font-size: 11px; font-weight: 500;
+  background: var(--green-light); color: var(--green-dark);
+  padding: 3px 10px; border-radius: 100px; margin-bottom: 1rem;
+}
+.pricing-name { font-family: 'Lora', serif; font-size: 1.2rem; font-weight: 600; color: var(--bark); margin-bottom: 0.5rem; }
+.pricing-price { font-size: 2rem; font-weight: 500; color: var(--bark); margin-bottom: 0.25rem; }
+.pricing-price span { font-size: 14px; color: var(--bark3); font-weight: 300; }
+.pricing-desc { font-size: 13px; color: var(--bark2); line-height: 1.6; margin-bottom: 1.5rem; }
+.pricing-features { list-style: none; }
+.pricing-features li {
+  font-size: 13px; color: var(--bark2); padding: 5px 0;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid rgba(61,52,40,0.05);
+}
+.pricing-features li:last-child { border-bottom: none; }
+.check { color: var(--green); font-size: 14px; flex-shrink: 0; }
+
+/* CTA SECTION */
+.cta-section {
+  padding: 7rem 2rem;
+  text-align: center;
+  max-width: 680px; margin: 0 auto;
+}
+.cta-section h2 {
+  font-family: 'Lora', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600; color: var(--bark);
+  line-height: 1.2; margin-bottom: 1.25rem;
+}
+.cta-section h2 em { font-style: italic; color: var(--green); }
+.cta-section p { font-size: 1rem; color: var(--bark2); font-weight: 300; line-height: 1.7; margin-bottom: 2.5rem; }
+
+/* FOOTER */
+footer {
+  background: var(--bark);
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.footer-logo { font-family: 'Lora', serif; font-size: 1.1rem; color: white; margin-bottom: 0.5rem; }
+.footer-sub { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.6; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 768px) {
+  nav { padding: 1rem; }
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-content { padding: 7rem 1.25rem 3rem; max-width: 100%; }
+  .hero-image-panel { height: 260px; }
+  .hero-image-overlay { background: linear-gradient(to bottom, transparent 60%, var(--cream) 100%); }
+  .hero-stats { gap: 1.5rem; }
+  .explainer { grid-template-columns: 1fr; gap: 2rem; }
+  .pricing-cards { grid-template-columns: 1fr; }
+  .step-connector { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-icon">🌿</span>
+    <span class="nav-logo-text">FODMAP Kitchen</span>
+  </a>
+  <a href="app.html" class="nav-cta">Open app →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span class="hero-tag-dot"></span>
+      Free to use · No sign-up needed
+    </div>
+    <h1>Eat well,<br>even with <em>IBS.</em></h1>
+    <p class="hero-sub">FODMAP Kitchen gives you IBS-friendly recipes and an instant ingredient checker — so you always know what's safe to eat.</p>
+    <div class="hero-actions">
+      <a href="app.html" class="btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Open FODMAP Kitchen
+      </a>
+      <span class="hero-note">Free · No account required</span>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">24+</div>
+        <div class="stat-label">FODMAP-safe recipes</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div>
+        <div class="stat-num">90+</div>
+        <div class="stat-label">Ingredients checked</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div>
+        <div class="stat-num">100%</div>
+        <div class="stat-label">IBS friendly</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-image-panel">
+    <img src="hero.jpg" alt="A healthy FODMAP-friendly grain bowl with quinoa and green vegetables">
+    <div class="hero-image-overlay"></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="reveal">
+    <div class="section-label">What's inside</div>
+    <h2 class="section-title">Everything you need<br>in your FODMAP kitchen</h2>
+    <p class="section-sub">No more guessing at the supermarket or staring at a recipe wondering if it's safe. We've done the research for you.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon">🍽️</div>
+      <div class="feature-title">Recipe library</div>
+      <p class="feature-desc">Browse 24+ tested recipes across breakfast, lunch, dinner and snacks. Every single one is IBS-friendly and clearly labelled. Free forever.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">📋</div>
+      <div class="feature-title">Ingredient library</div>
+      <p class="feature-desc">90+ ingredients organised by category, filterable by safe, caution and avoid. Based on Monash University FODMAP guidelines. Free forever.</p>
+    </div>
+    <div class="feature-card reveal" style="border-color: var(--green); position:relative;">
+      <div style="position:absolute;top:-12px;left:1.5rem;background:var(--green);color:white;font-size:11px;font-weight:500;padding:3px 10px;border-radius:100px">⭐ Premium</div>
+      <div class="feature-icon" style="background:var(--green);color:white">🔍</div>
+      <div class="feature-title">Ingredient checker</div>
+      <p class="feature-desc">Type any ingredient and instantly see if it's safe, needs portion care, or should be avoided — with plain-English explanations and portion guidance.</p>
+    </div>
+    <div class="feature-card reveal" style="position:relative;">
+      <div style="position:absolute;top:-12px;left:1.5rem;background:var(--green);color:white;font-size:11px;font-weight:500;padding:3px 10px;border-radius:100px">⭐ Premium</div>
+      <div class="feature-icon">📅</div>
+      <div class="feature-title">Meal planner & more</div>
+      <p class="feature-desc">Weekly meal planner, saved favourites and shopping list export. All premium features unlock for a one-time payment of just €1.99.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="how-inner">
+    <div class="reveal">
+      <div class="section-label">How it works</div>
+      <h2 class="section-title" style="color:white">Simple enough for a flare-up day</h2>
+      <p class="section-sub">Living with IBS is already hard enough. FODMAP Kitchen is designed to be genuinely quick to use.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-title">Search a recipe or ingredient</div>
+        <p class="step-desc">Type what you're looking for — a meal idea, or just an ingredient you're unsure about.</p>
+        <div class="step-connector">→</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-title">Get instant FODMAP guidance</div>
+        <p class="step-desc">See immediately whether it's safe, needs portion care, or should be avoided — with clear notes on why.</p>
+        <div class="step-connector">→</div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-title">Cook with confidence</div>
+        <p class="step-desc">Follow step-by-step recipes knowing every ingredient has been checked. No surprises, no flare-ups.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPLAINER -->
+<section style="padding: 6rem 2rem; max-width: 1100px; margin: 0 auto;">
+  <div class="explainer reveal">
+    <div class="explainer-text">
+      <div class="section-label">What is FODMAP?</div>
+      <h2 class="section-title">The diet that actually helps IBS</h2>
+      <p>FODMAPs are a group of short-chain carbohydrates that are poorly absorbed in the gut. For people with IBS, they can cause bloating, cramps, and other symptoms.</p>
+      <p>The low-FODMAP diet — developed by Monash University — helps identify and manage trigger foods. It's clinically proven to reduce IBS symptoms in up to 75% of people who try it.</p>
+      <p>FODMAP Kitchen makes following the diet easier by doing the lookup work for you.</p>
+    </div>
+    <div class="explainer-visual reveal">
+      <div style="font-size:13px;font-weight:500;color:var(--bark3);margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.06em">Sample ingredient check</div>
+      <div class="fodmap-row"><span class="fodmap-name">🥚 Eggs</span><div class="fodmap-status"><span class="dot dot-safe"></span><span class="label-safe">Safe</span></div></div>
+      <div class="fodmap-row"><span class="fodmap-name">🧅 Garlic</span><div class="fodmap-status"><span class="dot dot-avoid"></span><span class="label-avoid">Avoid</span></div></div>
+      <div class="fodmap-row"><span class="fodmap-name">🥛 Lactose-free milk</span><div class="fodmap-status"><span class="dot dot-safe"></span><span class="label-safe">Safe</span></div></div>
+      <div class="fodmap-row"><span class="fodmap-name">🌾 Rolled oats</span><div class="fodmap-status"><span class="dot dot-caution"></span><span class="label-caution">Caution</span></div></div>
+      <div class="fodmap-row"><span class="fodmap-name">🍗 Chicken</span><div class="fodmap-status"><span class="dot dot-safe"></span><span class="label-safe">Safe</span></div></div>
+      <div class="fodmap-row"><span class="fodmap-name">🍎 Apple</span><div class="fodmap-status"><span class="dot dot-avoid"></span><span class="label-avoid">Avoid</span></div></div>
+      <div class="fodmap-row"><span class="fodmap-name">🫐 Blueberries</span><div class="fodmap-status"><span class="dot dot-safe"></span><span class="label-safe">Safe</span></div></div>
+      <div class="fodmap-row"><span class="fodmap-name">🥑 Avocado</span><div class="fodmap-status"><span class="dot dot-caution"></span><span class="label-caution">Caution</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing">
+  <div class="pricing-inner">
+    <div class="reveal">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Free to start.<br>Unlock more for less than a coffee.</h2>
+      <p class="section-sub">No subscription. No recurring fees. Pay once, keep it forever.</p>
+    </div>
+    <div class="pricing-cards reveal">
+      <div class="pricing-card">
+        <div class="pricing-name">Free</div>
+        <div class="pricing-price">€0 <span>forever</span></div>
+        <p class="pricing-desc">Everything you need to start cooking FODMAP-safe meals today.</p>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 24+ FODMAP-safe recipes</li>
+          <li><span class="check">✓</span> 90+ ingredient library</li>
+          <li><span class="check">✓</span> No account needed</li>
+          <li style="color:var(--bark3)"><span style="color:var(--bark3)">—</span> Ingredient checker</li>
+          <li style="color:var(--bark3)"><span style="color:var(--bark3)">—</span> Meal planner</li>
+        </ul>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-badge">One-time purchase</div>
+        <div class="pricing-name">Premium</div>
+        <div class="pricing-price">€1.99 <span>once, no subscription</span></div>
+        <p class="pricing-desc">Unlock the ingredient checker and planning tools. Pay once, keep forever.</p>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> Everything in Free</li>
+          <li><span class="check">✓</span> Full ingredient checker</li>
+          <li><span class="check">✓</span> Weekly meal planner</li>
+          <li><span class="check">✓</span> Save favourite recipes</li>
+          <li><span class="check">✓</span> Shopping list export</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <h2>Your gut will<br>thank <em>you.</em></h2>
+  <p>Join thousands of people managing IBS with confidence. Free to use, no sign-up, no fuss.</p>
+  <a href="app.html" class="btn-primary" style="display:inline-flex">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    Open FODMAP Kitchen — it's free
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🌿 FODMAP Kitchen</div>
+  <div class="footer-sub" style="margin-top:0.5rem">Based on Monash University FODMAP guidelines.<br>Always consult your dietitian for personal medical advice.</div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
