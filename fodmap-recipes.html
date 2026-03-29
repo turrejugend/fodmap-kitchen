@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free FODMAP Recipes & IBS Ingredient Checker | Gut Friendly</title>
-<meta name="description" content="Browse 24+ free FODMAP-safe recipes for IBS. Instantly check if any ingredient is low FODMAP. Based on Monash University guidelines. No sign-up needed.">
+<meta name="description" content="Browse 29+ free FODMAP-safe recipes for IBS — including 5 NYT Classic recipes adapted for a low-FODMAP diet. Carbonara, roast chicken, no-knead bread and more. No sign-up needed.">
 <meta name="keywords" content="FODMAP recipes, low FODMAP diet, IBS friendly recipes, FODMAP ingredient checker, IBS diet app, low FODMAP food list, FODMAP safe foods, irritable bowel syndrome recipes">
 <meta name="google-site-verification" content="cTex2kzEWHWsViqhkSCiEAgDEYS-FuHdVOEwJyhiLtk" />
 <link rel="canonical" href="https://gutfriendly.app/fodmap-recipes">
@@ -34,7 +34,7 @@
     "priceCurrency": "EUR"
   },
   "featureList": [
-    "24+ FODMAP-safe recipes",
+    "29+ FODMAP-safe recipes including NYT Classics",
     "90+ ingredient FODMAP checker",
     "IBS-friendly meal ideas",
     "Based on Monash University FODMAP guidelines"
@@ -75,7 +75,7 @@
       "name": "Is Gut Friendly free to use?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes — Gut Friendly is free to use with no sign-up required. You can browse all 24+ FODMAP-safe recipes for free. The ingredient checker and library unlock with a one-time purchase of €1.99 with no subscription."
+        "text": "Yes — Gut Friendly is free to use with no sign-up required. You can browse all 29+ FODMAP-safe recipes for free, including 5 NYT Classic recipes adapted for IBS. The ingredient checker and library unlock with a one-time purchase of €1.99 with no subscription."
       }
     },
     {
@@ -168,6 +168,69 @@ p { font-size: 15px; color: var(--bark2); margin-bottom: 1rem; font-weight: 300;
 .tag { display: inline-block; background: var(--green-light); color: var(--green-dark); font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 8px; margin-right: 4px; }
 
 footer { text-align: center; padding: 3rem 1.5rem; font-size: 12px; color: var(--bark3); border-top: 1px solid rgba(61,52,40,0.08); margin-top: 4rem; }
+.nyt-block {
+  margin: 2.5rem 0;
+  background: var(--bark);
+  border-radius: 20px;
+  padding: 2rem;
+  overflow: hidden;
+  position: relative;
+}
+.nyt-block::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 100% 0%, rgba(45,181,132,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.nyt-block-label {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #2db584; margin-bottom: 0.5rem;
+}
+.nyt-block h3 {
+  font-family: 'Lora', serif; font-size: 1.3rem; font-weight: 600;
+  color: white; margin-bottom: 0.5rem; line-height: 1.25;
+}
+.nyt-block p {
+  font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 1.5rem; font-weight: 300; line-height: 1.7;
+}
+.nyt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+.nyt-recipe-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 12px;
+  padding: 1rem;
+  text-decoration: none;
+  display: flex; flex-direction: column; gap: 6px;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+.nyt-recipe-card:hover {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(45,181,132,0.35);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.nyt-recipe-card .re { font-size: 24px; }
+.nyt-recipe-card .rt { font-size: 13px; font-weight: 600; color: white; line-height: 1.3; }
+.nyt-recipe-card .rm { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 2px; }
+.nyt-recipe-card .rb {
+  font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 100px;
+  width: fit-content; margin-top: 4px;
+}
+.rb-safe { background: rgba(26,140,101,0.2); color: #4fd4a4; }
+.rb-caution { background: rgba(212,135,42,0.2); color: #e5a84a; }
+.nyt-block-cta {
+  display: inline-flex; align-items: center;
+  background: var(--green); color: white;
+  padding: 10px 20px; border-radius: 100px;
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  transition: background 0.2s;
+}
+.nyt-block-cta:hover { background: var(--green-dark); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -260,7 +323,46 @@ footer { text-align: center; padding: 3rem 1.5rem; font-size: 12px; color: var(-
     <a href="/app.html" class="recipe-card"><div class="recipe-emoji">🫐</div><div class="recipe-title">Berry & yoghurt parfait</div><div class="recipe-cat">Snack · 5 min</div></a>
   </div>
 
-  <a href="/app.html" class="btn-green" style="display:inline-block;margin:0.5rem 0 2rem">See all 24+ recipes →</a>
+  <div class="nyt-block">
+    <div class="nyt-block-label">NYT Classics — IBS adapted</div>
+    <h3>Iconic recipes, made gut-friendly</h3>
+    <p>Five of the New York Times' most popular recipes ever — adapted with low-FODMAP swaps like garlic-infused oil, lactose-free dairy and GF flour. Carbonara that's safe. Roast chicken without the trigger. A plum torte you can actually eat.</p>
+    <div class="nyt-grid">
+      <a href="/app.html" class="nyt-recipe-card">
+        <span class="re">🍗</span>
+        <span class="rt">Buttermilk-Brined Roast Chicken</span>
+        <span class="rm">Dinner · 1 hr 15 min</span>
+        <span class="rb rb-safe">FODMAP safe</span>
+      </a>
+      <a href="/app.html" class="nyt-recipe-card">
+        <span class="re">🍞</span>
+        <span class="rt">No-Knead Bread</span>
+        <span class="rm">Sides · 45 min + overnight</span>
+        <span class="rb rb-caution">Watch portions</span>
+      </a>
+      <a href="/app.html" class="nyt-recipe-card">
+        <span class="re">🍝</span>
+        <span class="rt">Spaghetti alla Carbonara</span>
+        <span class="rm">Dinner · 20 min</span>
+        <span class="rb rb-safe">FODMAP safe</span>
+      </a>
+      <a href="/app.html" class="nyt-recipe-card">
+        <span class="re">🥗</span>
+        <span class="rt">Sheet-Pan Chicken & Garlic Yogurt</span>
+        <span class="rm">Dinner · 40 min</span>
+        <span class="rb rb-safe">FODMAP safe</span>
+      </a>
+      <a href="/app.html" class="nyt-recipe-card">
+        <span class="re">🫐</span>
+        <span class="rt">Original Plum Torte</span>
+        <span class="rm">Dessert · 50 min</span>
+        <span class="rb rb-caution">Watch portions</span>
+      </a>
+    </div>
+    <a href="/app.html" class="nyt-block-cta">Open all NYT Classics in the app →</a>
+  </div>
+
+  <a href="/app.html" class="btn-green" style="display:inline-block;margin:0.5rem 0 2rem">See all 29+ recipes →</a>
 
   <h2>Common FODMAP mistakes to avoid</h2>
 
@@ -303,7 +405,7 @@ footer { text-align: center; padding: 3rem 1.5rem; font-size: 12px; color: var(-
   <div class="cta-box" style="margin-top:3rem">
     <div>
       <div class="cta-box-text">Start eating well with IBS today</div>
-      <div class="cta-box-sub">Free to use · 24+ recipes · No sign-up needed</div>
+      <div class="cta-box-sub">Free to use · 29+ recipes · No sign-up needed</div>
     </div>
     <a href="/app.html" class="btn-green">Open Gut Friendly →</a>
   </div>
