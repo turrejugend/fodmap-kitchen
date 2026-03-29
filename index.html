@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FODMAP Kitchen — IBS-friendly recipes & ingredient checker</title>
+<meta name="description" content="Browse IBS-friendly FODMAP recipes and check if ingredients are safe. Free to use.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1D9E75; --green-light: #E1F5EE; --green-dark: #085041;
+    --amber: #BA7517; --amber-light: #FAEEDA;
+    --red: #A32D2D; --red-light: #FCEBEB;
+    --bg: #ffffff; --bg2: #f6f6f4; --bg3: #f0f0ec;
+    --text: #1a1a18; --text2: #6b6b67; --text3: #9e9e9a;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --radius: 12px; --radius-sm: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18; --bg2: #242422; --bg3: #2c2c2a;
+      --text: #f0f0ec; --text2: #a0a09c; --text3: #6b6b67;
+      --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.2);
+      --green-light: #04342C; --green-dark: #9FE1CB;
+      --amber-light: #412402; --red-light: #501313;
+    }
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; }
+  .app { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  header { margin-bottom: 2rem; }
+  .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .logo-icon { font-size: 26px; }
+  .logo-text { font-size: 22px; font-weight: 600; color: var(--text); }
+  .logo-sub { font-size: 13px; color: var(--text2); }
+  .tabs { display: flex; gap: 4px; margin-bottom: 1.5rem; background: var(--bg2); border-radius: var(--radius); padding: 4px; }
+  .tab { flex: 1; padding: 8px 12px; font-size: 14px; font-weight: 500; color: var(--text2); cursor: pointer; border-radius: var(--radius-sm); background: none; border: none; transition: all 0.15s; }
+  .tab.active { background: var(--bg); color: var(--green); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .section { display: none; } .section.active { display: block; }
+  .search-bar { width: 100%; padding: 11px 16px; font-size: 15px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); color: var(--text); margin-bottom: 1rem; outline: none; transition: border-color 0.15s; }
+  .search-bar:focus { border-color: var(--green); }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.25rem; }
+  .filter-btn { padding: 5px 14px; font-size: 13px; border: 1px solid var(--border); border-radius: 20px; background: var(--bg); color: var(--text2); cursor: pointer; transition: all 0.15s; }
+  .filter-btn.active { background: var(--green-light); color: var(--green-dark); border-color: var(--green); }
+  .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+  .recipe-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; cursor: pointer; transition: border-color 0.15s, transform 0.1s; }
+  .recipe-card:hover { border-color: var(--green); transform: translateY(-1px); }
+  .recipe-emoji { font-size: 28px; margin-bottom: 8px; }
+  .recipe-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+  .recipe-meta { font-size: 12px; color: var(--text2); }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-top: 6px; font-weight: 500; }
+  .badge-safe { background: var(--green-light); color: var(--green-dark); }
+  .badge-caution { background: var(--amber-light); color: var(--amber); }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
+  .overlay.open { display: flex; }
+  .modal { background: var(--bg); border-radius: var(--radius); padding: 1.5rem; max-width: 480px; width: 100%; max-height: 88vh; overflow-y: auto; position: relative; }
+  .modal-close { position: absolute; top: 14px; right: 16px; background: var(--bg2); border: none; width: 28px; height: 28px; border-radius: 50%; font-size: 16px; cursor: pointer; color: var(--text2); display: flex; align-items: center; justify-content: center; }
+  .modal-emoji { font-size: 38px; margin-bottom: 8px; }
+  .modal-title { font-size: 19px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+  .modal-desc { font-size: 13px; color: var(--text2); margin-bottom: 1rem; line-height: 1.6; }
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); margin: 1rem 0 6px; }
+  .ing-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); }
+  .ing-row:last-child { border-bottom: none; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-safe { background: var(--green); } .dot-caution { background: var(--amber); } .dot-avoid { background: var(--red); }
+  .steps { list-style: none; }
+  .steps li { padding: 6px 0; font-size: 13px; color: var(--text); border-bottom: 1px solid var(--border); display: flex; gap: 10px; line-height: 1.5; }
+  .steps li:last-child { border-bottom: none; }
+  .step-n { color: var(--green); font-weight: 700; flex-shrink: 0; min-width: 18px; }
+  .legend { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 11px; color: var(--text3); display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .legend span { display: flex; align-items: center; gap: 4px; }
+  .checker-input { width: 100%; padding: 11px 16px; font-size: 15px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); color: var(--text); outline: none; margin-bottom: 1rem; transition: border-color 0.15s; }
+  .checker-input:focus { border-color: var(--green); }
+  .result-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; margin-bottom: 8px; }
+  .result-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .result-status { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .result-note { font-size: 12px; color: var(--text2); line-height: 1.6; }
+  .status-safe { color: var(--green); } .status-caution { color: var(--amber); } .status-avoid { color: var(--red); }
+  .ing-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: var(--radius-sm); margin-bottom: 2px; font-size: 13px; cursor: pointer; transition: background 0.1s; }
+  .ing-item:hover { background: var(--bg2); }
+  .cat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); padding: 4px 10px; margin: 12px 0 2px; }
+  .empty { text-align: center; color: var(--text2); font-size: 14px; padding: 2.5rem 0; }
+  .lib-count { font-size: 12px; color: var(--text3); margin-bottom: 8px; }
+  footer { text-align: center; font-size: 12px; color: var(--text3); margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  @media (max-width: 480px) {
+    .recipe-grid { grid-template-columns: 1fr 1fr; }
+    .tab { font-size: 12px; padding: 8px 6px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo"><span class="logo-icon">🌿</span><span class="logo-text">FODMAP Kitchen</span></div>
+    <div class="logo-sub">IBS-friendly recipes & ingredient checker</div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('recipes',this)">Recipes</button>
+    <button class="tab" onclick="switchTab('checker',this)">Ingredient checker</button>
+    <button class="tab" onclick="switchTab('library',this)">Ingredient library</button>
+  </div>
+
+  <div id="recipes" class="section active">
+    <input class="search-bar" placeholder="Search recipes..." oninput="filterRecipes(this.value)" id="recipe-search">
+    <div class="filters" id="cat-filters"></div>
+    <div class="recipe-grid" id="recipe-grid"></div>
+  </div>
+
+  <div id="checker" class="section">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Type an ingredient to check if it's FODMAP safe.</p>
+    <input class="checker-input" id="check-input" placeholder="e.g. garlic, oats, almond milk..." oninput="checkIngredient(this.value)">
+    <div id="check-results"></div>
+  </div>
+
+  <div id="library" class="section">
+    <input class="search-bar" placeholder="Search ingredients..." oninput="filterLibrary(this.value)" id="lib-search">
+    <div class="filters">
+      <button class="filter-btn active" onclick="setLibFilter('all',this)">All</button>
+      <button class="filter-btn" onclick="setLibFilter('safe',this)">Safe</button>
+      <button class="filter-btn" onclick="setLibFilter('caution',this)">Caution</button>
+      <button class="filter-btn" onclick="setLibFilter('avoid',this)">Avoid</button>
+    </div>
+    <div class="lib-count" id="lib-count"></div>
+    <div id="lib-list"></div>
+  </div>
+
+  <footer>Based on Monash University FODMAP guidelines. Always consult your dietitian for personal advice.</footer>
+</div>
+
+<div class="overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+const ingredients = [
+  {name:"Chicken",category:"Protein",status:"safe",note:"All plain cooked chicken is FODMAP free. Avoid marinades with garlic or onion."},
+  {name:"Beef (plain)",category:"Protein",status:"safe",note:"All plain cooked beef is FODMAP free. Check seasoning mixes for hidden onion or garlic powder."},
+  {name:"Pork (plain)",category:"Protein",status:"safe",note:"Plain pork cuts are FODMAP free. Avoid sausages with onion or garlic fillers."},
+  {name:"Salmon",category:"Protein",status:"safe",note:"All fresh fish is FODMAP free. Great omega-3 source."},
+  {name:"Tuna (canned in water)",category:"Protein",status:"safe",note:"FODMAP free. Check for onion or garlic in flavoured varieties."},
+  {name:"Cod",category:"Protein",status:"safe",note:"All white fish is FODMAP free."},
+  {name:"Prawns / shrimp",category:"Protein",status:"safe",note:"FODMAP free in normal servings. Avoid pre-marinated varieties."},
+  {name:"Eggs",category:"Protein",status:"safe",note:"Completely FODMAP free. One of the most versatile safe proteins."},
+  {name:"Tofu (firm)",category:"Protein",status:"safe",note:"Firm tofu is low FODMAP. Silken tofu contains more GOS — use in small amounts."},
+  {name:"White rice",category:"Grains",status:"safe",note:"FODMAP free. A reliable staple for any meal."},
+  {name:"Brown rice",category:"Grains",status:"safe",note:"FODMAP free. Higher fibre than white rice."},
+  {name:"Quinoa",category:"Grains",status:"safe",note:"FODMAP free. High protein grain, great wheat alternative."},
+  {name:"Gluten-free pasta",category:"Grains",status:"safe",note:"FODMAP free. Look for rice- or corn-based varieties."},
+  {name:"Rice noodles",category:"Grains",status:"safe",note:"FODMAP free. Great for Asian-style dishes."},
+  {name:"Polenta / cornmeal",category:"Grains",status:"safe",note:"FODMAP free. Versatile for porridge, baking or as a side."},
+  {name:"Potato",category:"Vegetables",status:"safe",note:"Plain potato is FODMAP free. Avoid toppings with garlic or onion."},
+  {name:"Sweet potato",category:"Vegetables",status:"safe",note:"FODMAP free up to 1/2 cup. Larger servings may contain sorbitol."},
+  {name:"Carrot",category:"Vegetables",status:"safe",note:"FODMAP free in normal serving sizes."},
+  {name:"Zucchini / courgette",category:"Vegetables",status:"safe",note:"Completely FODMAP free. Very versatile."},
+  {name:"Spinach",category:"Vegetables",status:"safe",note:"Safe up to 3 cups. Great for salads and cooking."},
+  {name:"Kale",category:"Vegetables",status:"safe",note:"FODMAP free in 1-cup servings. A nutrient-dense green."},
+  {name:"Tomato",category:"Vegetables",status:"safe",note:"Common tomato is FODMAP free. Cherry tomatoes safe up to 5 per serving."},
+  {name:"Bell pepper (red/yellow/orange)",category:"Vegetables",status:"safe",note:"Red, yellow and orange bell peppers are FODMAP free. Limit green bell pepper."},
+  {name:"Cucumber",category:"Vegetables",status:"safe",note:"Completely FODMAP free."},
+  {name:"Eggplant / aubergine",category:"Vegetables",status:"safe",note:"FODMAP free up to 3/4 cup. A great meat substitute when roasted."},
+  {name:"Green beans",category:"Vegetables",status:"safe",note:"FODMAP free up to 15 beans per serving."},
+  {name:"Bok choy",category:"Vegetables",status:"safe",note:"FODMAP free. Great in stir-fries."},
+  {name:"Bean sprouts",category:"Vegetables",status:"safe",note:"FODMAP free. Add to stir-fries or salads."},
+  {name:"Corn (canned, rinsed)",category:"Vegetables",status:"safe",note:"Safe up to 1/2 cup. Rinsing reduces FODMAP content."},
+  {name:"Parsnip",category:"Vegetables",status:"safe",note:"FODMAP free in 1/2 cup servings."},
+  {name:"Strawberry",category:"Fruit",status:"safe",note:"FODMAP free up to 10 berries."},
+  {name:"Banana (firm/unripe)",category:"Fruit",status:"safe",note:"Firm bananas are low FODMAP. Ripe bananas are higher in fructose."},
+  {name:"Blueberry",category:"Fruit",status:"safe",note:"Safe up to 20 berries per serving."},
+  {name:"Raspberry",category:"Fruit",status:"safe",note:"Safe up to 10 raspberries. High in fibre."},
+  {name:"Kiwi",category:"Fruit",status:"safe",note:"FODMAP free. Two kiwis per serving is a safe portion."},
+  {name:"Orange",category:"Fruit",status:"safe",note:"FODMAP free in one medium orange. Also great as juice (120ml)."},
+  {name:"Pineapple",category:"Fruit",status:"safe",note:"FODMAP free in 1-cup servings."},
+  {name:"Grapes",category:"Fruit",status:"safe",note:"FODMAP free up to 1 cup."},
+  {name:"Mandarin",category:"Fruit",status:"safe",note:"FODMAP free in two mandarins per serving."},
+  {name:"Lactose-free milk",category:"Dairy",status:"safe",note:"FODMAP free. Direct replacement for regular milk."},
+  {name:"Oat milk",category:"Dairy",status:"safe",note:"Low FODMAP in 1/2 cup servings."},
+  {name:"Almond milk (plain)",category:"Dairy",status:"safe",note:"FODMAP free in 1-cup servings."},
+  {name:"Coconut milk (canned, 1/2 cup)",category:"Dairy",status:"safe",note:"Safe up to 1/2 cup. Larger amounts are high in GOS."},
+  {name:"Cheddar cheese",category:"Dairy",status:"safe",note:"Hard cheeses are very low in lactose and FODMAP free."},
+  {name:"Feta cheese",category:"Dairy",status:"safe",note:"Low lactose, FODMAP free in normal portions."},
+  {name:"Parmesan",category:"Dairy",status:"safe",note:"Very low lactose, FODMAP free. Great for adding flavour."},
+  {name:"Brie / camembert",category:"Dairy",status:"safe",note:"Soft ripened cheeses are low in lactose. Safe in 40g portions."},
+  {name:"Lactose-free yoghurt",category:"Dairy",status:"safe",note:"FODMAP free. Regular yoghurt is high in lactose — always choose lactose-free."},
+  {name:"Olive oil",category:"Condiments",status:"safe",note:"FODMAP free. Use liberally in cooking."},
+  {name:"Garlic-infused oil",category:"Condiments",status:"safe",note:"FODMAP stays in the bulb, not the oil. Safe garlic-flavour substitute."},
+  {name:"Tamari (gluten-free soy sauce)",category:"Condiments",status:"safe",note:"FODMAP free in small amounts (2 tbsp)."},
+  {name:"Maple syrup",category:"Condiments",status:"safe",note:"FODMAP free up to 2 tablespoons per serving."},
+  {name:"Rice wine vinegar",category:"Condiments",status:"safe",note:"FODMAP free. Use in dressings and Asian dishes."},
+  {name:"Mustard (plain)",category:"Condiments",status:"safe",note:"FODMAP free. Check labels for garlic or onion in flavoured varieties."},
+  {name:"Mayonnaise (plain)",category:"Condiments",status:"safe",note:"FODMAP free. Avoid varieties with garlic or onion."},
+  {name:"Tomato paste (2 tbsp)",category:"Condiments",status:"safe",note:"Safe in 2-tbsp servings. Larger amounts can be high in fructose."},
+  {name:"Fresh herbs (basil, thyme, rosemary, parsley)",category:"Condiments",status:"safe",note:"All common fresh herbs are FODMAP free in cooking amounts."},
+  {name:"Ginger (fresh)",category:"Condiments",status:"safe",note:"FODMAP free. Great digestive benefit too."},
+  {name:"Turmeric",category:"Condiments",status:"safe",note:"FODMAP free. Anti-inflammatory spice."},
+  {name:"Cumin",category:"Condiments",status:"safe",note:"FODMAP free in cooking amounts."},
+  {name:"Paprika",category:"Condiments",status:"safe",note:"FODMAP free in cooking amounts."},
+  {name:"Cinnamon",category:"Condiments",status:"safe",note:"FODMAP free. Lovely in sweet and savoury dishes."},
+  {name:"Peanut butter (plain)",category:"Nuts & Seeds",status:"safe",note:"FODMAP free in 2-tbsp servings. Check no added sweeteners."},
+  {name:"Walnuts",category:"Nuts & Seeds",status:"safe",note:"Safe up to 10 walnut halves."},
+  {name:"Macadamia nuts",category:"Nuts & Seeds",status:"safe",note:"FODMAP free up to 20 nuts."},
+  {name:"Pumpkin seeds",category:"Nuts & Seeds",status:"safe",note:"FODMAP free in 2-tbsp servings."},
+  {name:"Sunflower seeds",category:"Nuts & Seeds",status:"safe",note:"FODMAP free in 2-tbsp servings."},
+  {name:"Chia seeds",category:"Nuts & Seeds",status:"safe",note:"FODMAP free in 2-tbsp servings."},
+  {name:"Dark chocolate (70%+)",category:"Other",status:"safe",note:"Safe up to 30g. Milk chocolate is higher in lactose."},
+  {name:"Rolled oats",category:"Grains",status:"caution",note:"Moderate fructans. Stick to 1/2 cup per serving."},
+  {name:"Sourdough spelt bread",category:"Grains",status:"caution",note:"Fermentation reduces fructans. Limit to 2 slices per sitting."},
+  {name:"Sourdough wheat bread",category:"Grains",status:"caution",note:"Long fermentation lowers FODMAP. 2 slices is the safe limit."},
+  {name:"Lentils (canned, rinsed)",category:"Legumes",status:"caution",note:"Rinsed canned lentils are lower FODMAP. Limit to 1/4 cup per serving."},
+  {name:"Chickpeas (canned, rinsed)",category:"Legumes",status:"caution",note:"Limit to 1/4 cup. Rinsing well reduces FODMAP content significantly."},
+  {name:"Edamame",category:"Legumes",status:"caution",note:"Safe up to 1/2 cup. Larger amounts are high in GOS and fructans."},
+  {name:"Avocado",category:"Fruit",status:"caution",note:"Safe up to 1/8 of a whole avocado. Higher amounts contain polyols (sorbitol)."},
+  {name:"Mango",category:"Fruit",status:"caution",note:"Safe up to 40g (small slice). Higher amounts are rich in fructose."},
+  {name:"Almonds",category:"Nuts & Seeds",status:"caution",note:"Safe in portions of 10 nuts. Larger amounts are high in GOS."},
+  {name:"Cashews",category:"Nuts & Seeds",status:"caution",note:"Very small portions (10 nuts) are low FODMAP. High in GOS in larger amounts."},
+  {name:"Broccoli (heads only)",category:"Vegetables",status:"caution",note:"Heads are lower FODMAP than stalks. Safe up to 3/4 cup."},
+  {name:"Leek (green tops only)",category:"Vegetables",status:"caution",note:"Green tops are low FODMAP; the white bulb is high in fructans."},
+  {name:"Spring onion (green tops only)",category:"Vegetables",status:"caution",note:"Green tops are FODMAP free. The white bulb is high in fructans — avoid it."},
+  {name:"Butternut squash (1/4 cup)",category:"Vegetables",status:"caution",note:"Small servings are safe. Larger amounts are high in fructose."},
+  {name:"Coconut cream",category:"Dairy",status:"caution",note:"Safe in 1/4 cup servings. High in GOS in larger amounts."},
+  {name:"Honey",category:"Condiments",status:"caution",note:"Very small amounts (1 tsp) may be tolerated. High in fructose — use maple syrup instead."},
+  {name:"Garlic",category:"Vegetables",status:"avoid",note:"Very high in fructans. Even small amounts can trigger symptoms. Use garlic-infused oil as a safe alternative."},
+  {name:"Onion (all varieties)",category:"Vegetables",status:"avoid",note:"Very high in fructans. Avoid all types including shallots and leeks (white part)."},
+  {name:"Cauliflower",category:"Vegetables",status:"avoid",note:"High in fructans. Broccoli heads are a lower-FODMAP substitute."},
+  {name:"Mushrooms (common)",category:"Vegetables",status:"avoid",note:"High in mannitol (polyol). Oyster mushrooms are a lower-FODMAP alternative."},
+  {name:"Asparagus",category:"Vegetables",status:"avoid",note:"High in fructans. No safe serving size established."},
+  {name:"Apple",category:"Fruit",status:"avoid",note:"High in fructose and sorbitol. Try banana or strawberries instead."},
+  {name:"Pear",category:"Fruit",status:"avoid",note:"Very high in fructose. One of the highest FODMAP fruits."},
+  {name:"Watermelon",category:"Fruit",status:"avoid",note:"High in fructose and mannitol. Avoid entirely."},
+  {name:"Dried fruit",category:"Fruit",status:"avoid",note:"Concentrated FODMAPs. Avoid raisins, dates, apricots, figs, prunes."},
+  {name:"Wheat bread",category:"Grains",status:"avoid",note:"High in fructans. Choose sourdough spelt or gluten-free alternatives."},
+  {name:"Regular pasta",category:"Grains",status:"avoid",note:"High in fructans. Swap for rice or gluten-free pasta."},
+  {name:"Rye bread",category:"Grains",status:"avoid",note:"Very high in fructans. One of the worst grains for IBS."},
+  {name:"Milk (cow's, regular)",category:"Dairy",status:"avoid",note:"High in lactose. Use lactose-free or plant-based alternatives."},
+  {name:"Yoghurt (regular)",category:"Dairy",status:"avoid",note:"High in lactose. Always choose lactose-free yoghurt."},
+  {name:"Ice cream (regular)",category:"Dairy",status:"avoid",note:"High in lactose and often high-fructose corn syrup. Choose lactose-free alternatives."},
+  {name:"Kidney beans",category:"Legumes",status:"avoid",note:"High in GOS. Canned and rinsed reduces but does not eliminate FODMAPs."},
+  {name:"Hummus",category:"Legumes",status:"avoid",note:"Made from chickpeas and garlic — both high FODMAP."},
+  {name:"Garlic powder / onion powder",category:"Condiments",status:"avoid",note:"Highly concentrated fructans. Even tiny amounts in spice blends can trigger symptoms."},
+  {name:"High-fructose corn syrup",category:"Condiments",status:"avoid",note:"Very high in excess fructose. Check labels on sauces, dressings and soft drinks."},
+];
+
+const recipes = [
+  {id:1,emoji:"🍳",title:"Scrambled eggs with spinach",cat:"Breakfast",time:"10 min",ingredients:[{name:"Eggs (3)",status:"safe"},{name:"Spinach (1 cup)",status:"safe"},{name:"Cheddar cheese (30g)",status:"safe"},{name:"Olive oil (1 tsp)",status:"safe"},{name:"Salt & pepper",status:"safe"}],desc:"Creamy scrambled eggs with wilted spinach and cheddar. A quick, filling FODMAP-safe breakfast.",steps:["Heat olive oil in a pan over medium heat.","Whisk eggs with a pinch of salt and pepper.","Add eggs to pan, stir gently with a spatula.","When nearly set, add spinach and cheese.","Cook 30 seconds more and serve immediately."]},
+  {id:2,emoji:"🥣",title:"Oat porridge with banana & maple",cat:"Breakfast",time:"10 min",ingredients:[{name:"Rolled oats (1/2 cup)",status:"caution"},{name:"Oat milk (1 cup)",status:"safe"},{name:"Banana, firm (1/2)",status:"safe"},{name:"Maple syrup (1 tbsp)",status:"safe"},{name:"Cinnamon",status:"safe"}],desc:"Warming oat porridge topped with firm banana and a drizzle of maple syrup. Keep oats to 1/2 cup.",steps:["Combine oats and oat milk in a small pot.","Heat over medium, stirring until thick (5 min).","Pour into bowl, top with sliced banana.","Drizzle maple syrup and sprinkle cinnamon."]},
+  {id:3,emoji:"🫐",title:"Blueberry chia overnight oats",cat:"Breakfast",time:"5 min + overnight",ingredients:[{name:"Rolled oats (1/2 cup)",status:"caution"},{name:"Oat milk (200ml)",status:"safe"},{name:"Chia seeds (2 tbsp)",status:"safe"},{name:"Blueberries (20)",status:"safe"},{name:"Maple syrup (1 tsp)",status:"safe"}],desc:"Prep the night before for a no-cook breakfast bursting with blueberries and omega-3 rich chia seeds.",steps:["Mix oats, oat milk and chia seeds in a jar.","Stir well, cover and refrigerate overnight.","In the morning, top with blueberries and maple syrup.","Add a splash more oat milk if too thick."]},
+  {id:4,emoji:"🥞",title:"Rice flour banana pancakes",cat:"Breakfast",time:"20 min",ingredients:[{name:"Rice flour (1 cup)",status:"safe"},{name:"Eggs (2)",status:"safe"},{name:"Banana, firm (1)",status:"safe"},{name:"Oat milk (150ml)",status:"safe"},{name:"Maple syrup",status:"safe"},{name:"Olive oil",status:"safe"}],desc:"Fluffy gluten-free pancakes naturally sweetened with banana. Stack them high with fresh strawberries.",steps:["Mash banana until smooth.","Whisk in eggs, oat milk and a pinch of salt.","Fold in rice flour until a smooth batter forms.","Heat oil in a pan, pour small rounds.","Cook 2–3 min per side until golden. Serve with strawberries and maple syrup."]},
+  {id:5,emoji:"🍓",title:"Strawberry banana smoothie",cat:"Breakfast",time:"5 min",ingredients:[{name:"Strawberries (10)",status:"safe"},{name:"Banana, firm (1/2)",status:"safe"},{name:"Oat milk (200ml)",status:"safe"},{name:"Chia seeds (1 tbsp)",status:"safe"}],desc:"A quick, creamy smoothie — naturally sweet with zero FODMAP issues. Great on busy mornings.",steps:["Add all ingredients to a blender.","Blend until smooth and creamy.","Serve immediately over ice if desired."]},
+  {id:6,emoji:"🍳",title:"Vegetable omelette",cat:"Breakfast",time:"15 min",ingredients:[{name:"Eggs (3)",status:"safe"},{name:"Bell pepper (1/2, red)",status:"safe"},{name:"Spinach (handful)",status:"safe"},{name:"Feta cheese (30g)",status:"safe"},{name:"Olive oil",status:"safe"},{name:"Fresh basil",status:"safe"}],desc:"A colourful omelette packed with bell pepper, spinach and salty feta. Ready in 15 minutes.",steps:["Whisk eggs with salt and pepper.","Heat oil in a non-stick pan over medium heat.","Pour in eggs, swirl to coat the pan.","Add peppers and spinach to one half when nearly set.","Fold over, cook 1 min more. Top with feta and basil."]},
+  {id:7,emoji:"🥗",title:"Quinoa tabbouleh",cat:"Lunch",time:"20 min",ingredients:[{name:"Quinoa (1 cup, cooked)",status:"safe"},{name:"Tomato (1, diced)",status:"safe"},{name:"Cucumber (1/2)",status:"safe"},{name:"Spinach (handful)",status:"safe"},{name:"Olive oil (2 tbsp)",status:"safe"},{name:"Lemon juice",status:"safe"}],desc:"A FODMAP-friendly twist on classic tabbouleh using quinoa instead of bulgur wheat.",steps:["Cook quinoa and let cool completely.","Dice tomato and cucumber finely.","Combine quinoa, tomato, cucumber and spinach.","Dress with olive oil and lemon juice.","Season well, refrigerate 10 min before serving."]},
+  {id:8,emoji:"🥕",title:"Roasted veggie bowl",cat:"Lunch",time:"30 min",ingredients:[{name:"Carrot (2)",status:"safe"},{name:"Bell pepper (1, red)",status:"safe"},{name:"Potato (1 medium)",status:"safe"},{name:"Zucchini (1)",status:"safe"},{name:"Quinoa (1 cup, cooked)",status:"safe"},{name:"Feta cheese (40g)",status:"safe"},{name:"Olive oil",status:"safe"}],desc:"Colourful roasted carrots, bell pepper, potato and zucchini over quinoa with crumbled feta.",steps:["Preheat oven to 200°C.","Chop all vegetables into bite-size pieces.","Toss with olive oil, salt and pepper on a baking tray.","Roast 20–25 min until golden and tender.","Serve over quinoa and crumble feta on top."]},
+  {id:9,emoji:"🥙",title:"Rice paper rolls with prawn",cat:"Lunch",time:"25 min",ingredients:[{name:"Rice paper sheets (8)",status:"safe"},{name:"Prawns (200g, cooked)",status:"safe"},{name:"Rice noodles (100g)",status:"safe"},{name:"Carrot (1, julienned)",status:"safe"},{name:"Cucumber (1/2, julienned)",status:"safe"},{name:"Spinach leaves",status:"safe"},{name:"Tamari (for dipping)",status:"safe"}],desc:"Fresh and light Vietnamese-inspired rice paper rolls. Perfect for a no-cook summer lunch.",steps:["Soak rice noodles per package, drain and cool.","Soak one rice paper at a time in warm water 15 sec.","Lay flat, add noodles, prawn, carrot, cucumber and spinach.","Roll tightly, folding in the sides.","Serve with tamari dipping sauce."]},
+  {id:10,emoji:"🥫",title:"Tuna & rice salad",cat:"Lunch",time:"10 min",ingredients:[{name:"Tuna (1 can, in water)",status:"safe"},{name:"White rice (1 cup, cooked)",status:"safe"},{name:"Tomato (1, diced)",status:"safe"},{name:"Cucumber (1/2)",status:"safe"},{name:"Olive oil (1 tbsp)",status:"safe"},{name:"Lemon juice",status:"safe"},{name:"Fresh parsley",status:"safe"}],desc:"A quick, protein-packed lunch that comes together in minutes with pantry staples.",steps:["Drain and flake tuna into a bowl.","Add cooled rice, diced tomato and cucumber.","Dress with olive oil and lemon juice.","Season with salt and pepper, top with fresh parsley."]},
+  {id:11,emoji:"🍜",title:"Miso soup with tofu & bok choy",cat:"Lunch",time:"15 min",ingredients:[{name:"Firm tofu (150g)",status:"safe"},{name:"Bok choy (2 heads)",status:"safe"},{name:"Tamari (1 tbsp)",status:"safe"},{name:"Ginger (1 tsp, fresh)",status:"safe"},{name:"Rice noodles (80g)",status:"safe"},{name:"Spring onion, green tops",status:"caution"}],desc:"A warming, gut-friendly soup. Use a FODMAP-safe miso paste (check no garlic/onion added).",steps:["Bring 600ml water to a simmer.","Add tamari, ginger and soaked rice noodles.","Add sliced bok choy and cubed tofu.","Simmer 5 min. Stir in 1 tbsp miso paste off the heat.","Garnish with spring onion green tops."]},
+  {id:12,emoji:"🥚",title:"Egg fried rice",cat:"Lunch",time:"15 min",ingredients:[{name:"Cooked rice (2 cups)",status:"safe"},{name:"Eggs (2)",status:"safe"},{name:"Carrot (1, grated)",status:"safe"},{name:"Tamari (2 tbsp)",status:"safe"},{name:"Garlic-infused oil",status:"safe"},{name:"Spring onion green tops",status:"caution"}],desc:"Quick weeknight egg fried rice using tamari and garlic-infused oil instead of raw garlic.",steps:["Heat garlic-infused oil in a wok or large pan.","Add carrot, stir-fry 2 min.","Push aside, scramble eggs in the pan.","Add cold rice, mix everything together.","Add tamari, toss well, top with spring onion greens."]},
+  {id:13,emoji:"🍗",title:"Lemon herb baked chicken",cat:"Dinner",time:"35 min",ingredients:[{name:"Chicken breast (2)",status:"safe"},{name:"Olive oil (2 tbsp)",status:"safe"},{name:"Lemon juice & zest",status:"safe"},{name:"Fresh thyme",status:"safe"},{name:"Garlic-infused oil (1 tsp)",status:"safe"},{name:"Salt & pepper",status:"safe"}],desc:"Tender baked chicken marinated in lemon, olive oil and fresh herbs. Simple and satisfying.",steps:["Preheat oven to 200°C.","Mix olive oil, garlic-infused oil, lemon, thyme, salt, pepper.","Coat chicken breasts in marinade.","Place in baking dish and bake 25–30 min.","Rest 5 min before slicing."]},
+  {id:14,emoji:"🐟",title:"Teriyaki salmon with rice",cat:"Dinner",time:"25 min",ingredients:[{name:"Salmon fillet (2)",status:"safe"},{name:"White rice (1 cup, cooked)",status:"safe"},{name:"Zucchini (1)",status:"safe"},{name:"Tamari (2 tbsp)",status:"safe"},{name:"Maple syrup (1 tbsp)",status:"safe"},{name:"Olive oil",status:"safe"}],desc:"Pan-seared salmon with a tamari-maple glaze over fluffy white rice and sautéed zucchini.",steps:["Cook rice per package.","Mix tamari and maple syrup into glaze.","Heat oil in pan, cook salmon 3 min each side.","Brush glaze on salmon in final minute.","Sauté sliced zucchini 3 min in same pan. Serve together."]},
+  {id:15,emoji:"🍝",title:"Beef bolognese (GF pasta)",cat:"Dinner",time:"40 min",ingredients:[{name:"Beef mince (400g)",status:"safe"},{name:"Gluten-free pasta (300g)",status:"safe"},{name:"Tomato paste (2 tbsp)",status:"safe"},{name:"Canned tomatoes (400g)",status:"safe"},{name:"Garlic-infused oil",status:"safe"},{name:"Carrot (1, grated)",status:"safe"},{name:"Fresh basil",status:"safe"}],desc:"A rich, comforting bolognese using garlic-infused oil instead of garlic cloves. Family favourite.",steps:["Heat garlic-infused oil in a large pot.","Brown beef mince, breaking it up well.","Add grated carrot, cook 3 min.","Stir in tomato paste, then canned tomatoes.","Simmer 20 min. Cook pasta separately. Serve topped with fresh basil."]},
+  {id:16,emoji:"🍛",title:"Chicken & rice curry",cat:"Dinner",time:"35 min",ingredients:[{name:"Chicken thigh (400g)",status:"safe"},{name:"White rice (1 cup)",status:"safe"},{name:"Coconut milk (1/2 cup)",status:"safe"},{name:"Canned tomatoes (200g)",status:"safe"},{name:"Turmeric (1 tsp)",status:"safe"},{name:"Cumin (1 tsp)",status:"safe"},{name:"Ginger (1 tsp)",status:"safe"},{name:"Garlic-infused oil",status:"safe"}],desc:"A fragrant, mild curry with no onion or garlic cloves — just warm spices and creamy coconut milk.",steps:["Heat garlic-infused oil in a pan.","Add chicken, brown on all sides.","Add spices, stir 1 min until fragrant.","Add canned tomatoes and coconut milk.","Simmer 20 min. Serve over rice."]},
+  {id:17,emoji:"🥩",title:"Pan-seared steak with roasted potato",cat:"Dinner",time:"30 min",ingredients:[{name:"Beef steak (2, 200g each)",status:"safe"},{name:"Potato (3 medium)",status:"safe"},{name:"Olive oil",status:"safe"},{name:"Fresh rosemary",status:"safe"},{name:"Salt & pepper",status:"safe"},{name:"Kale (side)",status:"safe"}],desc:"A classic steak dinner — no FODMAP compromises needed. Just good meat, crispy potatoes and greens.",steps:["Preheat oven to 220°C. Chop potatoes, toss with oil, rosemary, salt.","Roast 25 min until golden and crispy.","Bring steak to room temperature, season generously.","Sear in a hot pan 3 min per side for medium-rare.","Rest 5 min. Serve with potatoes and wilted kale."]},
+  {id:18,emoji:"🍤",title:"Prawn stir-fry with rice noodles",cat:"Dinner",time:"20 min",ingredients:[{name:"Prawns (300g)",status:"safe"},{name:"Rice noodles (200g)",status:"safe"},{name:"Bok choy (2 heads)",status:"safe"},{name:"Bell pepper (1, red)",status:"safe"},{name:"Bean sprouts (1/2 cup)",status:"safe"},{name:"Tamari (2 tbsp)",status:"safe"},{name:"Garlic-infused oil",status:"safe"},{name:"Ginger (1 tsp)",status:"safe"}],desc:"A quick and vibrant prawn stir-fry. Ready in 20 minutes with punchy ginger and tamari.",steps:["Soak rice noodles per package, drain.","Heat garlic-infused oil in a wok over high heat.","Add prawns and ginger, cook 2 min.","Add bok choy, bell pepper and bean sprouts.","Toss in noodles and tamari, stir-fry 2 min more."]},
+  {id:19,emoji:"🥦",title:"Baked salmon with roasted veg",cat:"Dinner",time:"30 min",ingredients:[{name:"Salmon fillet (2)",status:"safe"},{name:"Broccoli heads (2 cups)",status:"caution"},{name:"Carrot (2)",status:"safe"},{name:"Potato (2 medium)",status:"safe"},{name:"Olive oil",status:"safe"},{name:"Lemon",status:"safe"},{name:"Fresh dill",status:"safe"}],desc:"A wholesome sheet-pan dinner. Everything cooks together — minimal washing up.",steps:["Preheat oven to 200°C.","Chop potato and carrot, roast 15 min with oil and salt.","Add broccoli heads, roast 10 min more.","Place salmon on tray, season with lemon and dill.","Bake a final 12–15 min until salmon is just cooked through."]},
+  {id:20,emoji:"🌮",title:"Chicken tacos (corn tortillas)",cat:"Dinner",time:"25 min",ingredients:[{name:"Chicken breast (2, sliced)",status:"safe"},{name:"Corn tortillas (4)",status:"safe"},{name:"Bell pepper (1)",status:"safe"},{name:"Tomato (1, diced)",status:"safe"},{name:"Lactose-free yoghurt",status:"safe"},{name:"Paprika & cumin",status:"safe"},{name:"Garlic-infused oil",status:"safe"},{name:"Lime juice",status:"safe"}],desc:"Vibrant chicken tacos on corn tortillas with a cool yoghurt drizzle instead of sour cream.",steps:["Season chicken with paprika, cumin, salt.","Cook in garlic-infused oil until golden, slice.","Warm corn tortillas in a dry pan.","Fill with chicken, sliced pepper, diced tomato.","Drizzle with lactose-free yoghurt and lime juice."]},
+  {id:21,emoji:"🥜",title:"Peanut butter & banana rice cakes",cat:"Snack",time:"5 min",ingredients:[{name:"Rice cakes (3)",status:"safe"},{name:"Peanut butter (2 tbsp)",status:"safe"},{name:"Banana, firm (1/2)",status:"safe"},{name:"Chia seeds (1 tsp)",status:"safe"}],desc:"The ultimate 5-minute FODMAP snack. Crunchy, creamy and satisfying.",steps:["Spread peanut butter generously on each rice cake.","Top with banana slices.","Sprinkle with chia seeds and a pinch of cinnamon if desired."]},
+  {id:22,emoji:"🫐",title:"Berry & yoghurt parfait",cat:"Snack",time:"5 min",ingredients:[{name:"Lactose-free yoghurt (150g)",status:"safe"},{name:"Strawberries (6)",status:"safe"},{name:"Blueberries (15)",status:"safe"},{name:"Raspberries (8)",status:"safe"},{name:"Maple syrup (1 tsp)",status:"safe"},{name:"Pumpkin seeds (1 tbsp)",status:"safe"}],desc:"Layered berry parfait with lactose-free yoghurt. Beautiful and ready in 5 minutes.",steps:["Spoon half the yoghurt into a glass.","Add half the berries.","Repeat layers.","Drizzle maple syrup, top with pumpkin seeds."]},
+  {id:23,emoji:"🍿",title:"Maple cinnamon popcorn",cat:"Snack",time:"10 min",ingredients:[{name:"Popcorn kernels (1/4 cup)",status:"safe"},{name:"Olive oil (1 tbsp)",status:"safe"},{name:"Maple syrup (2 tbsp)",status:"safe"},{name:"Cinnamon (1/2 tsp)",status:"safe"},{name:"Salt (pinch)",status:"safe"}],desc:"A naturally sweet and satisfying snack. Great for movie nights.",steps:["Heat oil in a large pot, add kernels.","Pop with lid on over medium-high heat, shaking occasionally.","Remove from heat, drizzle with maple syrup.","Sprinkle cinnamon and a pinch of salt. Toss well."]},
+  {id:24,emoji:"🥚",title:"Devilled eggs",cat:"Snack",time:"20 min",ingredients:[{name:"Eggs (6)",status:"safe"},{name:"Mayonnaise (2 tbsp)",status:"safe"},{name:"Mustard (1 tsp)",status:"safe"},{name:"Paprika",status:"safe"},{name:"Salt & pepper",status:"safe"}],desc:"Classic devilled eggs — a protein-packed party snack with zero FODMAPs.",steps:["Boil eggs 10 min, cool in ice water.","Peel and halve lengthways.","Scoop yolks into a bowl, mash with mayo, mustard, salt, pepper.","Pipe or spoon filling back into whites.","Dust with paprika and serve."]},
+];
+
+const cats=["All","Breakfast","Lunch","Dinner","Snack"];
+let activeCat="All",libFilter="all";
+
+function init(){
+  const cf=document.getElementById("cat-filters");
+  cats.forEach(c=>{
+    const b=document.createElement("button");
+    b.className="filter-btn"+(c==="All"?" active":"");
+    b.textContent=c+(c==="All"?"":" ("+recipes.filter(r=>r.cat===c).length+")");
+    b.onclick=()=>{activeCat=c;document.querySelectorAll("#cat-filters .filter-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");filterRecipes(document.getElementById("recipe-search").value);};
+    cf.appendChild(b);
+  });
+  renderRecipes(recipes);
+  renderLibrary(ingredients);
+}
+
+function renderRecipes(list){
+  const g=document.getElementById("recipe-grid");g.innerHTML="";
+  if(!list.length){g.innerHTML='<div class="empty">No recipes found</div>';return;}
+  list.forEach(r=>{
+    const card=document.createElement("div");card.className="recipe-card";
+    const hasCaution=r.ingredients.some(i=>i.status==="caution");
+    card.innerHTML=`<div class="recipe-emoji">${r.emoji}</div><div class="recipe-title">${r.title}</div><div class="recipe-meta">${r.cat} · ${r.time}</div><span class="badge ${hasCaution?"badge-caution":"badge-safe"}">${hasCaution?"Watch portions":"FODMAP safe"}</span>`;
+    card.onclick=()=>openRecipe(r);g.appendChild(card);
+  });
+}
+
+function filterRecipes(q){
+  let list=recipes;
+  if(activeCat!=="All")list=list.filter(r=>r.cat===activeCat);
+  if(q.trim())list=list.filter(r=>r.title.toLowerCase().includes(q.toLowerCase()));
+  renderRecipes(list);
+}
+
+function openRecipe(r){
+  const ingRows=r.ingredients.map(i=>`<div class="ing-row"><span>${i.name}</span><span class="dot dot-${i.status}"></span></div>`).join("");
+  const steps=r.steps.map((s,i)=>`<li><span class="step-n">${i+1}</span><span>${s}</span></li>`).join("");
+  document.getElementById("modal-content").innerHTML=`<div class="modal-emoji">${r.emoji}</div><div class="modal-title">${r.title}</div><div class="modal-desc">${r.desc}</div><div style="display:flex;gap:8px;margin-bottom:1rem"><span class="badge badge-safe">${r.cat}</span><span class="badge" style="background:var(--bg2);color:var(--text2)">${r.time}</span></div><div class="section-label">Ingredients</div>${ingRows}<div class="section-label">Method</div><ol class="steps">${steps}</ol><div class="legend"><span><span class="dot dot-safe"></span>Safe</span><span><span class="dot dot-caution"></span>Caution / portion</span><span><span class="dot dot-avoid"></span>Avoid</span></div>`;
+  document.getElementById("modal").classList.add("open");
+}
+
+function closeModal(){document.getElementById("modal").classList.remove("open");}
+document.getElementById("modal").onclick=e=>{if(e.target===document.getElementById("modal"))closeModal();};
+
+function checkIngredient(q){
+  const res=document.getElementById("check-results");
+  if(!q.trim()){res.innerHTML="";return;}
+  const matches=ingredients.filter(i=>i.name.toLowerCase().includes(q.toLowerCase()));
+  if(!matches.length){res.innerHTML='<div class="empty">No ingredients found. Try a different spelling.</div>';return;}
+  res.innerHTML=matches.map(i=>`<div class="result-card"><div class="result-name">${i.name}</div><div class="result-status status-${i.status}">${i.status==="safe"?"✓ FODMAP safe":i.status==="caution"?"⚠ Caution — portion dependent":"✗ Avoid — high FODMAP"}</div><div class="result-note">${i.note}</div></div>`).join("");
+}
+
+function renderLibrary(list){
+  document.getElementById("lib-count").textContent=list.length+" ingredients";
+  const el=document.getElementById("lib-list");
+  if(!list.length){el.innerHTML='<div class="empty">No ingredients found</div>';return;}
+  const grouped={};list.forEach(i=>{if(!grouped[i.category])grouped[i.category]=[];grouped[i.category].push(i);});
+  el.innerHTML=Object.keys(grouped).sort().map(cat=>`<div style="margin-bottom:1rem"><div class="cat-label">${cat}</div>${grouped[cat].map(i=>`<div class="ing-item" onclick="showIngDetail('${i.name.replace(/'/g,"\\'")}')"><span>${i.name}</span><div style="display:flex;align-items:center;gap:6px"><span style="font-size:12px;color:var(--text2)">${i.status==="safe"?"Safe":i.status==="caution"?"Caution":"Avoid"}</span><span class="dot dot-${i.status}"></span></div></div>`).join("")}</div>`).join("");
+}
+
+function setLibFilter(f,btn){
+  libFilter=f;document.querySelectorAll("#library .filter-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");filterLibrary(document.getElementById("lib-search").value);
+}
+
+function filterLibrary(q){
+  let list=ingredients;
+  if(libFilter!=="all")list=list.filter(i=>i.status===libFilter);
+  if(q.trim())list=list.filter(i=>i.name.toLowerCase().includes(q.toLowerCase()));
+  renderLibrary(list);
+}
+
+function showIngDetail(name){
+  const i=ingredients.find(x=>x.name===name);if(!i)return;
+  document.getElementById("modal-content").innerHTML=`<div style="margin-bottom:8px"><span class="dot dot-${i.status}" style="display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:middle"></span><span class="modal-title" style="vertical-align:middle">${i.name}</span></div><div style="font-size:12px;color:var(--text3);margin-bottom:8px">${i.category}</div><div class="result-status status-${i.status}" style="margin-bottom:12px">${i.status==="safe"?"FODMAP safe":i.status==="caution"?"Caution — portion dependent":"Avoid — high FODMAP"}</div><div style="font-size:13px;color:var(--text2);line-height:1.6">${i.note}</div>`;
+  document.getElementById("modal").classList.add("open");
+}
+
+function switchTab(t,btn){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+  document.getElementById(t).classList.add("active");btn.classList.add("active");
+}
+
+init();
+</script>
+</body>
+</html>
