@@ -107,9 +107,18 @@
   </div>
 
   <div id="checker" class="section">
-    <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Type an ingredient to check if it's FODMAP safe.</p>
-    <input class="checker-input" id="check-input" placeholder="e.g. garlic, oats, almond milk..." oninput="checkIngredient(this.value)">
-    <div id="check-results"></div>
+    <div id="checker-locked" style="background:var(--bg);border:1.5px solid var(--green);border-radius:var(--radius);padding:2rem;text-align:center;margin-bottom:1rem">
+      <div style="font-size:32px;margin-bottom:12px">🔍</div>
+      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px">Ingredient checker</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:1.25rem">Instantly check if any ingredient is FODMAP safe, needs portion care, or should be avoided — with detailed notes.<br><br>This is a <strong>Premium</strong> feature.</div>
+      <div style="background:var(--green);color:white;display:inline-block;padding:10px 24px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:8px" onclick="unlockChecker()">Unlock for €1.99</div>
+      <div style="font-size:11px;color:var(--text3)">One-time payment · No subscription</div>
+    </div>
+    <div id="checker-unlocked" style="display:none">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Type an ingredient to check if it's FODMAP safe.</p>
+      <input class="checker-input" id="check-input" placeholder="e.g. garlic, oats, almond milk..." oninput="checkIngredient(this.value)">
+      <div id="check-results"></div>
+    </div>
   </div>
 
   <div id="library" class="section">
@@ -243,30 +252,248 @@ const ingredients = [
 ];
 
 const recipes = [
-  {id:1,emoji:"🍳",title:"Scrambled eggs with spinach",cat:"Breakfast",time:"10 min",ingredients:[{name:"Eggs (3)",status:"safe"},{name:"Spinach (1 cup)",status:"safe"},{name:"Cheddar cheese (30g)",status:"safe"},{name:"Olive oil (1 tsp)",status:"safe"},{name:"Salt & pepper",status:"safe"}],desc:"Creamy scrambled eggs with wilted spinach and cheddar. A quick, filling FODMAP-safe breakfast.",steps:["Heat olive oil in a pan over medium heat.","Whisk eggs with a pinch of salt and pepper.","Add eggs to pan, stir gently with a spatula.","When nearly set, add spinach and cheese.","Cook 30 seconds more and serve immediately."]},
-  {id:2,emoji:"🥣",title:"Oat porridge with banana & maple",cat:"Breakfast",time:"10 min",ingredients:[{name:"Rolled oats (1/2 cup)",status:"caution"},{name:"Oat milk (1 cup)",status:"safe"},{name:"Banana, firm (1/2)",status:"safe"},{name:"Maple syrup (1 tbsp)",status:"safe"},{name:"Cinnamon",status:"safe"}],desc:"Warming oat porridge topped with firm banana and a drizzle of maple syrup. Keep oats to 1/2 cup.",steps:["Combine oats and oat milk in a small pot.","Heat over medium, stirring until thick (5 min).","Pour into bowl, top with sliced banana.","Drizzle maple syrup and sprinkle cinnamon."]},
-  {id:3,emoji:"🫐",title:"Blueberry chia overnight oats",cat:"Breakfast",time:"5 min + overnight",ingredients:[{name:"Rolled oats (1/2 cup)",status:"caution"},{name:"Oat milk (200ml)",status:"safe"},{name:"Chia seeds (2 tbsp)",status:"safe"},{name:"Blueberries (20)",status:"safe"},{name:"Maple syrup (1 tsp)",status:"safe"}],desc:"Prep the night before for a no-cook breakfast bursting with blueberries and omega-3 rich chia seeds.",steps:["Mix oats, oat milk and chia seeds in a jar.","Stir well, cover and refrigerate overnight.","In the morning, top with blueberries and maple syrup.","Add a splash more oat milk if too thick."]},
-  {id:4,emoji:"🥞",title:"Rice flour banana pancakes",cat:"Breakfast",time:"20 min",ingredients:[{name:"Rice flour (1 cup)",status:"safe"},{name:"Eggs (2)",status:"safe"},{name:"Banana, firm (1)",status:"safe"},{name:"Oat milk (150ml)",status:"safe"},{name:"Maple syrup",status:"safe"},{name:"Olive oil",status:"safe"}],desc:"Fluffy gluten-free pancakes naturally sweetened with banana. Stack them high with fresh strawberries.",steps:["Mash banana until smooth.","Whisk in eggs, oat milk and a pinch of salt.","Fold in rice flour until a smooth batter forms.","Heat oil in a pan, pour small rounds.","Cook 2–3 min per side until golden. Serve with strawberries and maple syrup."]},
-  {id:5,emoji:"🍓",title:"Strawberry banana smoothie",cat:"Breakfast",time:"5 min",ingredients:[{name:"Strawberries (10)",status:"safe"},{name:"Banana, firm (1/2)",status:"safe"},{name:"Oat milk (200ml)",status:"safe"},{name:"Chia seeds (1 tbsp)",status:"safe"}],desc:"A quick, creamy smoothie — naturally sweet with zero FODMAP issues. Great on busy mornings.",steps:["Add all ingredients to a blender.","Blend until smooth and creamy.","Serve immediately over ice if desired."]},
-  {id:6,emoji:"🍳",title:"Vegetable omelette",cat:"Breakfast",time:"15 min",ingredients:[{name:"Eggs (3)",status:"safe"},{name:"Bell pepper (1/2, red)",status:"safe"},{name:"Spinach (handful)",status:"safe"},{name:"Feta cheese (30g)",status:"safe"},{name:"Olive oil",status:"safe"},{name:"Fresh basil",status:"safe"}],desc:"A colourful omelette packed with bell pepper, spinach and salty feta. Ready in 15 minutes.",steps:["Whisk eggs with salt and pepper.","Heat oil in a non-stick pan over medium heat.","Pour in eggs, swirl to coat the pan.","Add peppers and spinach to one half when nearly set.","Fold over, cook 1 min more. Top with feta and basil."]},
-  {id:7,emoji:"🥗",title:"Quinoa tabbouleh",cat:"Lunch",time:"20 min",ingredients:[{name:"Quinoa (1 cup, cooked)",status:"safe"},{name:"Tomato (1, diced)",status:"safe"},{name:"Cucumber (1/2)",status:"safe"},{name:"Spinach (handful)",status:"safe"},{name:"Olive oil (2 tbsp)",status:"safe"},{name:"Lemon juice",status:"safe"}],desc:"A FODMAP-friendly twist on classic tabbouleh using quinoa instead of bulgur wheat.",steps:["Cook quinoa and let cool completely.","Dice tomato and cucumber finely.","Combine quinoa, tomato, cucumber and spinach.","Dress with olive oil and lemon juice.","Season well, refrigerate 10 min before serving."]},
-  {id:8,emoji:"🥕",title:"Roasted veggie bowl",cat:"Lunch",time:"30 min",ingredients:[{name:"Carrot (2)",status:"safe"},{name:"Bell pepper (1, red)",status:"safe"},{name:"Potato (1 medium)",status:"safe"},{name:"Zucchini (1)",status:"safe"},{name:"Quinoa (1 cup, cooked)",status:"safe"},{name:"Feta cheese (40g)",status:"safe"},{name:"Olive oil",status:"safe"}],desc:"Colourful roasted carrots, bell pepper, potato and zucchini over quinoa with crumbled feta.",steps:["Preheat oven to 200°C.","Chop all vegetables into bite-size pieces.","Toss with olive oil, salt and pepper on a baking tray.","Roast 20–25 min until golden and tender.","Serve over quinoa and crumble feta on top."]},
-  {id:9,emoji:"🥙",title:"Rice paper rolls with prawn",cat:"Lunch",time:"25 min",ingredients:[{name:"Rice paper sheets (8)",status:"safe"},{name:"Prawns (200g, cooked)",status:"safe"},{name:"Rice noodles (100g)",status:"safe"},{name:"Carrot (1, julienned)",status:"safe"},{name:"Cucumber (1/2, julienned)",status:"safe"},{name:"Spinach leaves",status:"safe"},{name:"Tamari (for dipping)",status:"safe"}],desc:"Fresh and light Vietnamese-inspired rice paper rolls. Perfect for a no-cook summer lunch.",steps:["Soak rice noodles per package, drain and cool.","Soak one rice paper at a time in warm water 15 sec.","Lay flat, add noodles, prawn, carrot, cucumber and spinach.","Roll tightly, folding in the sides.","Serve with tamari dipping sauce."]},
-  {id:10,emoji:"🥫",title:"Tuna & rice salad",cat:"Lunch",time:"10 min",ingredients:[{name:"Tuna (1 can, in water)",status:"safe"},{name:"White rice (1 cup, cooked)",status:"safe"},{name:"Tomato (1, diced)",status:"safe"},{name:"Cucumber (1/2)",status:"safe"},{name:"Olive oil (1 tbsp)",status:"safe"},{name:"Lemon juice",status:"safe"},{name:"Fresh parsley",status:"safe"}],desc:"A quick, protein-packed lunch that comes together in minutes with pantry staples.",steps:["Drain and flake tuna into a bowl.","Add cooled rice, diced tomato and cucumber.","Dress with olive oil and lemon juice.","Season with salt and pepper, top with fresh parsley."]},
-  {id:11,emoji:"🍜",title:"Miso soup with tofu & bok choy",cat:"Lunch",time:"15 min",ingredients:[{name:"Firm tofu (150g)",status:"safe"},{name:"Bok choy (2 heads)",status:"safe"},{name:"Tamari (1 tbsp)",status:"safe"},{name:"Ginger (1 tsp, fresh)",status:"safe"},{name:"Rice noodles (80g)",status:"safe"},{name:"Spring onion, green tops",status:"caution"}],desc:"A warming, gut-friendly soup. Use a FODMAP-safe miso paste (check no garlic/onion added).",steps:["Bring 600ml water to a simmer.","Add tamari, ginger and soaked rice noodles.","Add sliced bok choy and cubed tofu.","Simmer 5 min. Stir in 1 tbsp miso paste off the heat.","Garnish with spring onion green tops."]},
-  {id:12,emoji:"🥚",title:"Egg fried rice",cat:"Lunch",time:"15 min",ingredients:[{name:"Cooked rice (2 cups)",status:"safe"},{name:"Eggs (2)",status:"safe"},{name:"Carrot (1, grated)",status:"safe"},{name:"Tamari (2 tbsp)",status:"safe"},{name:"Garlic-infused oil",status:"safe"},{name:"Spring onion green tops",status:"caution"}],desc:"Quick weeknight egg fried rice using tamari and garlic-infused oil instead of raw garlic.",steps:["Heat garlic-infused oil in a wok or large pan.","Add carrot, stir-fry 2 min.","Push aside, scramble eggs in the pan.","Add cold rice, mix everything together.","Add tamari, toss well, top with spring onion greens."]},
-  {id:13,emoji:"🍗",title:"Lemon herb baked chicken",cat:"Dinner",time:"35 min",ingredients:[{name:"Chicken breast (2)",status:"safe"},{name:"Olive oil (2 tbsp)",status:"safe"},{name:"Lemon juice & zest",status:"safe"},{name:"Fresh thyme",status:"safe"},{name:"Garlic-infused oil (1 tsp)",status:"safe"},{name:"Salt & pepper",status:"safe"}],desc:"Tender baked chicken marinated in lemon, olive oil and fresh herbs. Simple and satisfying.",steps:["Preheat oven to 200°C.","Mix olive oil, garlic-infused oil, lemon, thyme, salt, pepper.","Coat chicken breasts in marinade.","Place in baking dish and bake 25–30 min.","Rest 5 min before slicing."]},
-  {id:14,emoji:"🐟",title:"Teriyaki salmon with rice",cat:"Dinner",time:"25 min",ingredients:[{name:"Salmon fillet (2)",status:"safe"},{name:"White rice (1 cup, cooked)",status:"safe"},{name:"Zucchini (1)",status:"safe"},{name:"Tamari (2 tbsp)",status:"safe"},{name:"Maple syrup (1 tbsp)",status:"safe"},{name:"Olive oil",status:"safe"}],desc:"Pan-seared salmon with a tamari-maple glaze over fluffy white rice and sautéed zucchini.",steps:["Cook rice per package.","Mix tamari and maple syrup into glaze.","Heat oil in pan, cook salmon 3 min each side.","Brush glaze on salmon in final minute.","Sauté sliced zucchini 3 min in same pan. Serve together."]},
-  {id:15,emoji:"🍝",title:"Beef bolognese (GF pasta)",cat:"Dinner",time:"40 min",ingredients:[{name:"Beef mince (400g)",status:"safe"},{name:"Gluten-free pasta (300g)",status:"safe"},{name:"Tomato paste (2 tbsp)",status:"safe"},{name:"Canned tomatoes (400g)",status:"safe"},{name:"Garlic-infused oil",status:"safe"},{name:"Carrot (1, grated)",status:"safe"},{name:"Fresh basil",status:"safe"}],desc:"A rich, comforting bolognese using garlic-infused oil instead of garlic cloves. Family favourite.",steps:["Heat garlic-infused oil in a large pot.","Brown beef mince, breaking it up well.","Add grated carrot, cook 3 min.","Stir in tomato paste, then canned tomatoes.","Simmer 20 min. Cook pasta separately. Serve topped with fresh basil."]},
-  {id:16,emoji:"🍛",title:"Chicken & rice curry",cat:"Dinner",time:"35 min",ingredients:[{name:"Chicken thigh (400g)",status:"safe"},{name:"White rice (1 cup)",status:"safe"},{name:"Coconut milk (1/2 cup)",status:"safe"},{name:"Canned tomatoes (200g)",status:"safe"},{name:"Turmeric (1 tsp)",status:"safe"},{name:"Cumin (1 tsp)",status:"safe"},{name:"Ginger (1 tsp)",status:"safe"},{name:"Garlic-infused oil",status:"safe"}],desc:"A fragrant, mild curry with no onion or garlic cloves — just warm spices and creamy coconut milk.",steps:["Heat garlic-infused oil in a pan.","Add chicken, brown on all sides.","Add spices, stir 1 min until fragrant.","Add canned tomatoes and coconut milk.","Simmer 20 min. Serve over rice."]},
-  {id:17,emoji:"🥩",title:"Pan-seared steak with roasted potato",cat:"Dinner",time:"30 min",ingredients:[{name:"Beef steak (2, 200g each)",status:"safe"},{name:"Potato (3 medium)",status:"safe"},{name:"Olive oil",status:"safe"},{name:"Fresh rosemary",status:"safe"},{name:"Salt & pepper",status:"safe"},{name:"Kale (side)",status:"safe"}],desc:"A classic steak dinner — no FODMAP compromises needed. Just good meat, crispy potatoes and greens.",steps:["Preheat oven to 220°C. Chop potatoes, toss with oil, rosemary, salt.","Roast 25 min until golden and crispy.","Bring steak to room temperature, season generously.","Sear in a hot pan 3 min per side for medium-rare.","Rest 5 min. Serve with potatoes and wilted kale."]},
-  {id:18,emoji:"🍤",title:"Prawn stir-fry with rice noodles",cat:"Dinner",time:"20 min",ingredients:[{name:"Prawns (300g)",status:"safe"},{name:"Rice noodles (200g)",status:"safe"},{name:"Bok choy (2 heads)",status:"safe"},{name:"Bell pepper (1, red)",status:"safe"},{name:"Bean sprouts (1/2 cup)",status:"safe"},{name:"Tamari (2 tbsp)",status:"safe"},{name:"Garlic-infused oil",status:"safe"},{name:"Ginger (1 tsp)",status:"safe"}],desc:"A quick and vibrant prawn stir-fry. Ready in 20 minutes with punchy ginger and tamari.",steps:["Soak rice noodles per package, drain.","Heat garlic-infused oil in a wok over high heat.","Add prawns and ginger, cook 2 min.","Add bok choy, bell pepper and bean sprouts.","Toss in noodles and tamari, stir-fry 2 min more."]},
-  {id:19,emoji:"🥦",title:"Baked salmon with roasted veg",cat:"Dinner",time:"30 min",ingredients:[{name:"Salmon fillet (2)",status:"safe"},{name:"Broccoli heads (2 cups)",status:"caution"},{name:"Carrot (2)",status:"safe"},{name:"Potato (2 medium)",status:"safe"},{name:"Olive oil",status:"safe"},{name:"Lemon",status:"safe"},{name:"Fresh dill",status:"safe"}],desc:"A wholesome sheet-pan dinner. Everything cooks together — minimal washing up.",steps:["Preheat oven to 200°C.","Chop potato and carrot, roast 15 min with oil and salt.","Add broccoli heads, roast 10 min more.","Place salmon on tray, season with lemon and dill.","Bake a final 12–15 min until salmon is just cooked through."]},
-  {id:20,emoji:"🌮",title:"Chicken tacos (corn tortillas)",cat:"Dinner",time:"25 min",ingredients:[{name:"Chicken breast (2, sliced)",status:"safe"},{name:"Corn tortillas (4)",status:"safe"},{name:"Bell pepper (1)",status:"safe"},{name:"Tomato (1, diced)",status:"safe"},{name:"Lactose-free yoghurt",status:"safe"},{name:"Paprika & cumin",status:"safe"},{name:"Garlic-infused oil",status:"safe"},{name:"Lime juice",status:"safe"}],desc:"Vibrant chicken tacos on corn tortillas with a cool yoghurt drizzle instead of sour cream.",steps:["Season chicken with paprika, cumin, salt.","Cook in garlic-infused oil until golden, slice.","Warm corn tortillas in a dry pan.","Fill with chicken, sliced pepper, diced tomato.","Drizzle with lactose-free yoghurt and lime juice."]},
-  {id:21,emoji:"🥜",title:"Peanut butter & banana rice cakes",cat:"Snack",time:"5 min",ingredients:[{name:"Rice cakes (3)",status:"safe"},{name:"Peanut butter (2 tbsp)",status:"safe"},{name:"Banana, firm (1/2)",status:"safe"},{name:"Chia seeds (1 tsp)",status:"safe"}],desc:"The ultimate 5-minute FODMAP snack. Crunchy, creamy and satisfying.",steps:["Spread peanut butter generously on each rice cake.","Top with banana slices.","Sprinkle with chia seeds and a pinch of cinnamon if desired."]},
-  {id:22,emoji:"🫐",title:"Berry & yoghurt parfait",cat:"Snack",time:"5 min",ingredients:[{name:"Lactose-free yoghurt (150g)",status:"safe"},{name:"Strawberries (6)",status:"safe"},{name:"Blueberries (15)",status:"safe"},{name:"Raspberries (8)",status:"safe"},{name:"Maple syrup (1 tsp)",status:"safe"},{name:"Pumpkin seeds (1 tbsp)",status:"safe"}],desc:"Layered berry parfait with lactose-free yoghurt. Beautiful and ready in 5 minutes.",steps:["Spoon half the yoghurt into a glass.","Add half the berries.","Repeat layers.","Drizzle maple syrup, top with pumpkin seeds."]},
-  {id:23,emoji:"🍿",title:"Maple cinnamon popcorn",cat:"Snack",time:"10 min",ingredients:[{name:"Popcorn kernels (1/4 cup)",status:"safe"},{name:"Olive oil (1 tbsp)",status:"safe"},{name:"Maple syrup (2 tbsp)",status:"safe"},{name:"Cinnamon (1/2 tsp)",status:"safe"},{name:"Salt (pinch)",status:"safe"}],desc:"A naturally sweet and satisfying snack. Great for movie nights.",steps:["Heat oil in a large pot, add kernels.","Pop with lid on over medium-high heat, shaking occasionally.","Remove from heat, drizzle with maple syrup.","Sprinkle cinnamon and a pinch of salt. Toss well."]},
-  {id:24,emoji:"🥚",title:"Devilled eggs",cat:"Snack",time:"20 min",ingredients:[{name:"Eggs (6)",status:"safe"},{name:"Mayonnaise (2 tbsp)",status:"safe"},{name:"Mustard (1 tsp)",status:"safe"},{name:"Paprika",status:"safe"},{name:"Salt & pepper",status:"safe"}],desc:"Classic devilled eggs — a protein-packed party snack with zero FODMAPs.",steps:["Boil eggs 10 min, cool in ice water.","Peel and halve lengthways.","Scoop yolks into a bowl, mash with mayo, mustard, salt, pepper.","Pipe or spoon filling back into whites.","Dust with paprika and serve."]},
+  {id:1,emoji:"🍳",title:"Scrambled eggs with spinach",cat:"Breakfast",time:"10 min",
+    ingredients:[
+      {name:"Eggs",metric:"3",cups:"3",status:"safe"},
+      {name:"Spinach",metric:"30g",cups:"1 cup",status:"safe"},
+      {name:"Cheddar cheese",metric:"30g",cups:"¼ cup grated",status:"safe"},
+      {name:"Olive oil",metric:"5ml",cups:"1 tsp",status:"safe"},
+      {name:"Salt & pepper",metric:"to taste",cups:"to taste",status:"safe"}],
+    desc:"Creamy scrambled eggs with wilted spinach and cheddar. A quick, filling FODMAP-safe breakfast.",
+    steps:["Heat olive oil in a pan over medium heat.","Whisk eggs with a pinch of salt and pepper.","Add eggs to pan, stir gently with a spatula.","When nearly set, add spinach and cheese.","Cook 30 seconds more and serve immediately."]},
+  {id:2,emoji:"🥣",title:"Oat porridge with banana & maple",cat:"Breakfast",time:"10 min",
+    ingredients:[
+      {name:"Rolled oats",metric:"50g",cups:"½ cup",status:"caution"},
+      {name:"Oat milk",metric:"240ml",cups:"1 cup",status:"safe"},
+      {name:"Banana, firm",metric:"½ banana",cups:"½ banana",status:"safe"},
+      {name:"Maple syrup",metric:"15ml",cups:"1 tbsp",status:"safe"},
+      {name:"Cinnamon",metric:"pinch",cups:"pinch",status:"safe"}],
+    desc:"Warming oat porridge topped with firm banana and a drizzle of maple syrup. Keep oats to 50g / ½ cup.",
+    steps:["Combine oats and oat milk in a small pot.","Heat over medium, stirring until thick (5 min).","Pour into bowl, top with sliced banana.","Drizzle maple syrup and sprinkle cinnamon."]},
+  {id:3,emoji:"🫐",title:"Blueberry chia overnight oats",cat:"Breakfast",time:"5 min + overnight",
+    ingredients:[
+      {name:"Rolled oats",metric:"50g",cups:"½ cup",status:"caution"},
+      {name:"Oat milk",metric:"200ml",cups:"¾ cup",status:"safe"},
+      {name:"Chia seeds",metric:"20g",cups:"2 tbsp",status:"safe"},
+      {name:"Blueberries",metric:"60g",cups:"½ cup (20 berries)",status:"safe"},
+      {name:"Maple syrup",metric:"5ml",cups:"1 tsp",status:"safe"}],
+    desc:"Prep the night before for a no-cook breakfast bursting with blueberries and omega-3 rich chia seeds.",
+    steps:["Mix oats, oat milk and chia seeds in a jar.","Stir well, cover and refrigerate overnight.","In the morning, top with blueberries and maple syrup.","Add a splash more oat milk if too thick."]},
+  {id:4,emoji:"🥞",title:"Rice flour banana pancakes",cat:"Breakfast",time:"20 min",
+    ingredients:[
+      {name:"Rice flour",metric:"130g",cups:"1 cup",status:"safe"},
+      {name:"Eggs",metric:"2",cups:"2",status:"safe"},
+      {name:"Banana, firm",metric:"1 banana",cups:"1 banana",status:"safe"},
+      {name:"Oat milk",metric:"150ml",cups:"⅔ cup",status:"safe"},
+      {name:"Maple syrup",metric:"15ml",cups:"1 tbsp",status:"safe"},
+      {name:"Olive oil",metric:"10ml",cups:"2 tsp",status:"safe"}],
+    desc:"Fluffy gluten-free pancakes naturally sweetened with banana. Stack them high with fresh strawberries.",
+    steps:["Mash banana until smooth.","Whisk in eggs, oat milk and a pinch of salt.","Fold in rice flour until a smooth batter forms.","Heat oil in a pan, pour small rounds.","Cook 2–3 min per side until golden. Serve with strawberries and maple syrup."]},
+  {id:5,emoji:"🍓",title:"Strawberry banana smoothie",cat:"Breakfast",time:"5 min",
+    ingredients:[
+      {name:"Strawberries",metric:"150g",cups:"1 cup (10 berries)",status:"safe"},
+      {name:"Banana, firm",metric:"½ banana",cups:"½ banana",status:"safe"},
+      {name:"Oat milk",metric:"200ml",cups:"¾ cup",status:"safe"},
+      {name:"Chia seeds",metric:"10g",cups:"1 tbsp",status:"safe"}],
+    desc:"A quick, creamy smoothie — naturally sweet with zero FODMAP issues. Great on busy mornings.",
+    steps:["Add all ingredients to a blender.","Blend until smooth and creamy.","Serve immediately over ice if desired."]},
+  {id:6,emoji:"🍳",title:"Vegetable omelette",cat:"Breakfast",time:"15 min",
+    ingredients:[
+      {name:"Eggs",metric:"3",cups:"3",status:"safe"},
+      {name:"Bell pepper, red",metric:"75g (½ pepper)",cups:"½ cup sliced",status:"safe"},
+      {name:"Spinach",metric:"30g",cups:"1 cup",status:"safe"},
+      {name:"Feta cheese",metric:"30g",cups:"3 tbsp crumbled",status:"safe"},
+      {name:"Olive oil",metric:"10ml",cups:"2 tsp",status:"safe"},
+      {name:"Fresh basil",metric:"handful",cups:"handful",status:"safe"}],
+    desc:"A colourful omelette packed with bell pepper, spinach and salty feta. Ready in 15 minutes.",
+    steps:["Whisk eggs with salt and pepper.","Heat oil in a non-stick pan over medium heat.","Pour in eggs, swirl to coat the pan.","Add peppers and spinach to one half when nearly set.","Fold over, cook 1 min more. Top with feta and basil."]},
+  {id:7,emoji:"🥗",title:"Quinoa tabbouleh",cat:"Lunch",time:"20 min",
+    ingredients:[
+      {name:"Quinoa, cooked",metric:"185g",cups:"1 cup",status:"safe"},
+      {name:"Tomato",metric:"1 medium",cups:"1 medium",status:"safe"},
+      {name:"Cucumber",metric:"150g (½)",cups:"1 cup chopped",status:"safe"},
+      {name:"Spinach",metric:"30g",cups:"1 cup",status:"safe"},
+      {name:"Olive oil",metric:"30ml",cups:"2 tbsp",status:"safe"},
+      {name:"Lemon juice",metric:"30ml",cups:"2 tbsp",status:"safe"}],
+    desc:"A FODMAP-friendly twist on classic tabbouleh using quinoa instead of bulgur wheat.",
+    steps:["Cook quinoa and let cool completely.","Dice tomato and cucumber finely.","Combine quinoa, tomato, cucumber and spinach.","Dress with olive oil and lemon juice.","Season well, refrigerate 10 min before serving."]},
+  {id:8,emoji:"🥕",title:"Roasted veggie bowl",cat:"Lunch",time:"30 min",
+    ingredients:[
+      {name:"Carrot",metric:"200g (2 medium)",cups:"2 medium",status:"safe"},
+      {name:"Bell pepper, red",metric:"150g (1)",cups:"1 pepper",status:"safe"},
+      {name:"Potato",metric:"200g (1 medium)",cups:"1 medium",status:"safe"},
+      {name:"Zucchini",metric:"200g (1)",cups:"1 zucchini",status:"safe"},
+      {name:"Quinoa, cooked",metric:"185g",cups:"1 cup",status:"safe"},
+      {name:"Feta cheese",metric:"40g",cups:"4 tbsp crumbled",status:"safe"},
+      {name:"Olive oil",metric:"30ml",cups:"2 tbsp",status:"safe"}],
+    desc:"Colourful roasted carrots, bell pepper, potato and zucchini over quinoa with crumbled feta.",
+    steps:["Preheat oven to 200°C / 400°F.","Chop all vegetables into bite-size pieces.","Toss with olive oil, salt and pepper on a baking tray.","Roast 20–25 min until golden and tender.","Serve over quinoa and crumble feta on top."]},
+  {id:9,emoji:"🥙",title:"Rice paper rolls with prawn",cat:"Lunch",time:"25 min",
+    ingredients:[
+      {name:"Rice paper sheets",metric:"8 sheets",cups:"8 sheets",status:"safe"},
+      {name:"Prawns, cooked",metric:"200g",cups:"7 oz",status:"safe"},
+      {name:"Rice noodles",metric:"100g",cups:"3½ oz dry",status:"safe"},
+      {name:"Carrot, julienned",metric:"100g (1)",cups:"1 medium",status:"safe"},
+      {name:"Cucumber, julienned",metric:"150g (½)",cups:"1 cup",status:"safe"},
+      {name:"Spinach leaves",metric:"handful",cups:"handful",status:"safe"},
+      {name:"Tamari for dipping",metric:"30ml",cups:"2 tbsp",status:"safe"}],
+    desc:"Fresh and light Vietnamese-inspired rice paper rolls. Perfect for a no-cook summer lunch.",
+    steps:["Soak rice noodles per package, drain and cool.","Soak one rice paper at a time in warm water 15 sec.","Lay flat, add noodles, prawn, carrot, cucumber and spinach.","Roll tightly, folding in the sides.","Serve with tamari dipping sauce."]},
+  {id:10,emoji:"🥫",title:"Tuna & rice salad",cat:"Lunch",time:"10 min",
+    ingredients:[
+      {name:"Tuna, canned in water",metric:"1 can (185g)",cups:"1 can (6.5 oz)",status:"safe"},
+      {name:"White rice, cooked",metric:"185g",cups:"1 cup",status:"safe"},
+      {name:"Tomato",metric:"1 medium",cups:"1 medium",status:"safe"},
+      {name:"Cucumber",metric:"150g (½)",cups:"1 cup chopped",status:"safe"},
+      {name:"Olive oil",metric:"15ml",cups:"1 tbsp",status:"safe"},
+      {name:"Lemon juice",metric:"15ml",cups:"1 tbsp",status:"safe"},
+      {name:"Fresh parsley",metric:"handful",cups:"handful",status:"safe"}],
+    desc:"A quick, protein-packed lunch that comes together in minutes with pantry staples.",
+    steps:["Drain and flake tuna into a bowl.","Add cooled rice, diced tomato and cucumber.","Dress with olive oil and lemon juice.","Season with salt and pepper, top with fresh parsley."]},
+  {id:11,emoji:"🍜",title:"Miso soup with tofu & bok choy",cat:"Lunch",time:"15 min",
+    ingredients:[
+      {name:"Firm tofu",metric:"150g",cups:"5 oz",status:"safe"},
+      {name:"Bok choy",metric:"200g (2 heads)",cups:"2 heads",status:"safe"},
+      {name:"Tamari",metric:"15ml",cups:"1 tbsp",status:"safe"},
+      {name:"Ginger, fresh",metric:"5g",cups:"1 tsp grated",status:"safe"},
+      {name:"Rice noodles",metric:"80g",cups:"3 oz dry",status:"safe"},
+      {name:"Spring onion, green tops",metric:"2 stalks",cups:"2 stalks",status:"caution"}],
+    desc:"A warming, gut-friendly soup. Use a FODMAP-safe miso paste (check no garlic/onion added).",
+    steps:["Bring 600ml / 2½ cups water to a simmer.","Add tamari, ginger and soaked rice noodles.","Add sliced bok choy and cubed tofu.","Simmer 5 min. Stir in 1 tbsp miso paste off the heat.","Garnish with spring onion green tops."]},
+  {id:12,emoji:"🥚",title:"Egg fried rice",cat:"Lunch",time:"15 min",
+    ingredients:[
+      {name:"Cooked rice",metric:"370g",cups:"2 cups",status:"safe"},
+      {name:"Eggs",metric:"2",cups:"2",status:"safe"},
+      {name:"Carrot, grated",metric:"100g (1)",cups:"1 medium",status:"safe"},
+      {name:"Tamari",metric:"30ml",cups:"2 tbsp",status:"safe"},
+      {name:"Garlic-infused oil",metric:"15ml",cups:"1 tbsp",status:"safe"},
+      {name:"Spring onion green tops",metric:"2 stalks",cups:"2 stalks",status:"caution"}],
+    desc:"Quick weeknight egg fried rice using tamari and garlic-infused oil instead of raw garlic.",
+    steps:["Heat garlic-infused oil in a wok or large pan.","Add carrot, stir-fry 2 min.","Push aside, scramble eggs in the pan.","Add cold rice, mix everything together.","Add tamari, toss well, top with spring onion greens."]},
+  {id:13,emoji:"🍗",title:"Lemon herb baked chicken",cat:"Dinner",time:"35 min",
+    ingredients:[
+      {name:"Chicken breast",metric:"2 × 180g",cups:"2 × 6 oz",status:"safe"},
+      {name:"Olive oil",metric:"30ml",cups:"2 tbsp",status:"safe"},
+      {name:"Lemon juice & zest",metric:"1 lemon",cups:"1 lemon",status:"safe"},
+      {name:"Fresh thyme",metric:"4 sprigs",cups:"4 sprigs",status:"safe"},
+      {name:"Garlic-infused oil",metric:"5ml",cups:"1 tsp",status:"safe"},
+      {name:"Salt & pepper",metric:"to taste",cups:"to taste",status:"safe"}],
+    desc:"Tender baked chicken marinated in lemon, olive oil and fresh herbs. Simple and satisfying.",
+    steps:["Preheat oven to 200°C / 400°F.","Mix olive oil, garlic-infused oil, lemon, thyme, salt, pepper.","Coat chicken breasts in marinade.","Place in baking dish and bake 25–30 min.","Rest 5 min before slicing."]},
+  {id:14,emoji:"🐟",title:"Teriyaki salmon with rice",cat:"Dinner",time:"25 min",
+    ingredients:[
+      {name:"Salmon fillet",metric:"2 × 180g",cups:"2 × 6 oz",status:"safe"},
+      {name:"White rice, cooked",metric:"185g",cups:"1 cup",status:"safe"},
+      {name:"Zucchini",metric:"200g (1)",cups:"1 zucchini",status:"safe"},
+      {name:"Tamari",metric:"30ml",cups:"2 tbsp",status:"safe"},
+      {name:"Maple syrup",metric:"15ml",cups:"1 tbsp",status:"safe"},
+      {name:"Olive oil",metric:"10ml",cups:"2 tsp",status:"safe"}],
+    desc:"Pan-seared salmon with a tamari-maple glaze over fluffy white rice and sautéed zucchini.",
+    steps:["Cook rice per package.","Mix tamari and maple syrup into glaze.","Heat oil in pan, cook salmon 3 min each side.","Brush glaze on salmon in final minute.","Sauté sliced zucchini 3 min in same pan. Serve together."]},
+  {id:15,emoji:"🍝",title:"Beef bolognese (GF pasta)",cat:"Dinner",time:"40 min",
+    ingredients:[
+      {name:"Beef mince",metric:"400g",cups:"14 oz",status:"safe"},
+      {name:"Gluten-free pasta",metric:"300g",cups:"10½ oz",status:"safe"},
+      {name:"Tomato paste",metric:"30ml",cups:"2 tbsp",status:"safe"},
+      {name:"Canned tomatoes",metric:"400g",cups:"1 can (14 oz)",status:"safe"},
+      {name:"Garlic-infused oil",metric:"15ml",cups:"1 tbsp",status:"safe"},
+      {name:"Carrot, grated",metric:"100g (1)",cups:"1 medium",status:"safe"},
+      {name:"Fresh basil",metric:"handful",cups:"handful",status:"safe"}],
+    desc:"A rich, comforting bolognese using garlic-infused oil instead of garlic cloves. Family favourite.",
+    steps:["Heat garlic-infused oil in a large pot.","Brown beef mince, breaking it up well.","Add grated carrot, cook 3 min.","Stir in tomato paste, then canned tomatoes.","Simmer 20 min. Cook pasta separately. Serve topped with fresh basil."]},
+  {id:16,emoji:"🍛",title:"Chicken & rice curry",cat:"Dinner",time:"35 min",
+    ingredients:[
+      {name:"Chicken thigh",metric:"400g",cups:"14 oz",status:"safe"},
+      {name:"White rice",metric:"185g dry",cups:"1 cup dry",status:"safe"},
+      {name:"Coconut milk",metric:"120ml",cups:"½ cup",status:"safe"},
+      {name:"Canned tomatoes",metric:"200g",cups:"¾ cup",status:"safe"},
+      {name:"Turmeric",metric:"2g",cups:"1 tsp",status:"safe"},
+      {name:"Cumin",metric:"2g",cups:"1 tsp",status:"safe"},
+      {name:"Ginger, fresh",metric:"5g",cups:"1 tsp grated",status:"safe"},
+      {name:"Garlic-infused oil",metric:"15ml",cups:"1 tbsp",status:"safe"}],
+    desc:"A fragrant, mild curry with no onion or garlic cloves — just warm spices and creamy coconut milk.",
+    steps:["Heat garlic-infused oil in a pan.","Add chicken, brown on all sides.","Add spices, stir 1 min until fragrant.","Add canned tomatoes and coconut milk.","Simmer 20 min. Serve over rice."]},
+  {id:17,emoji:"🥩",title:"Pan-seared steak with roasted potato",cat:"Dinner",time:"30 min",
+    ingredients:[
+      {name:"Beef steak",metric:"2 × 200g",cups:"2 × 7 oz",status:"safe"},
+      {name:"Potato",metric:"600g (3 medium)",cups:"3 medium",status:"safe"},
+      {name:"Olive oil",metric:"30ml",cups:"2 tbsp",status:"safe"},
+      {name:"Fresh rosemary",metric:"3 sprigs",cups:"3 sprigs",status:"safe"},
+      {name:"Salt & pepper",metric:"to taste",cups:"to taste",status:"safe"},
+      {name:"Kale",metric:"80g",cups:"2 cups",status:"safe"}],
+    desc:"A classic steak dinner — no FODMAP compromises needed. Just good meat, crispy potatoes and greens.",
+    steps:["Preheat oven to 220°C / 430°F. Chop potatoes, toss with oil, rosemary, salt.","Roast 25 min until golden and crispy.","Bring steak to room temperature, season generously.","Sear in a hot pan 3 min per side for medium-rare.","Rest 5 min. Serve with potatoes and wilted kale."]},
+  {id:18,emoji:"🍤",title:"Prawn stir-fry with rice noodles",cat:"Dinner",time:"20 min",
+    ingredients:[
+      {name:"Prawns",metric:"300g",cups:"10½ oz",status:"safe"},
+      {name:"Rice noodles",metric:"200g",cups:"7 oz dry",status:"safe"},
+      {name:"Bok choy",metric:"200g (2 heads)",cups:"2 heads",status:"safe"},
+      {name:"Bell pepper, red",metric:"150g (1)",cups:"1 pepper",status:"safe"},
+      {name:"Bean sprouts",metric:"50g",cups:"½ cup",status:"safe"},
+      {name:"Tamari",metric:"30ml",cups:"2 tbsp",status:"safe"},
+      {name:"Garlic-infused oil",metric:"15ml",cups:"1 tbsp",status:"safe"},
+      {name:"Ginger, fresh",metric:"5g",cups:"1 tsp grated",status:"safe"}],
+    desc:"A quick and vibrant prawn stir-fry. Ready in 20 minutes with punchy ginger and tamari.",
+    steps:["Soak rice noodles per package, drain.","Heat garlic-infused oil in a wok over high heat.","Add prawns and ginger, cook 2 min.","Add bok choy, bell pepper and bean sprouts.","Toss in noodles and tamari, stir-fry 2 min more."]},
+  {id:19,emoji:"🥦",title:"Baked salmon with roasted veg",cat:"Dinner",time:"30 min",
+    ingredients:[
+      {name:"Salmon fillet",metric:"2 × 180g",cups:"2 × 6 oz",status:"safe"},
+      {name:"Broccoli heads",metric:"150g",cups:"1½ cups",status:"caution"},
+      {name:"Carrot",metric:"200g (2)",cups:"2 medium",status:"safe"},
+      {name:"Potato",metric:"400g (2 medium)",cups:"2 medium",status:"safe"},
+      {name:"Olive oil",metric:"30ml",cups:"2 tbsp",status:"safe"},
+      {name:"Lemon",metric:"1",cups:"1",status:"safe"},
+      {name:"Fresh dill",metric:"handful",cups:"handful",status:"safe"}],
+    desc:"A wholesome sheet-pan dinner. Everything cooks together — minimal washing up.",
+    steps:["Preheat oven to 200°C / 400°F.","Chop potato and carrot, roast 15 min with oil and salt.","Add broccoli heads, roast 10 min more.","Place salmon on tray, season with lemon and dill.","Bake a final 12–15 min until salmon is just cooked through."]},
+  {id:20,emoji:"🌮",title:"Chicken tacos (corn tortillas)",cat:"Dinner",time:"25 min",
+    ingredients:[
+      {name:"Chicken breast, sliced",metric:"2 × 180g",cups:"2 × 6 oz",status:"safe"},
+      {name:"Corn tortillas",metric:"4",cups:"4",status:"safe"},
+      {name:"Bell pepper",metric:"150g (1)",cups:"1 pepper",status:"safe"},
+      {name:"Tomato",metric:"1 medium",cups:"1 medium",status:"safe"},
+      {name:"Lactose-free yoghurt",metric:"60ml",cups:"¼ cup",status:"safe"},
+      {name:"Paprika & cumin",metric:"1 tsp each",cups:"1 tsp each",status:"safe"},
+      {name:"Garlic-infused oil",metric:"15ml",cups:"1 tbsp",status:"safe"},
+      {name:"Lime juice",metric:"15ml",cups:"1 tbsp",status:"safe"}],
+    desc:"Vibrant chicken tacos on corn tortillas with a cool yoghurt drizzle instead of sour cream.",
+    steps:["Season chicken with paprika, cumin, salt.","Cook in garlic-infused oil until golden, slice.","Warm corn tortillas in a dry pan.","Fill with chicken, sliced pepper, diced tomato.","Drizzle with lactose-free yoghurt and lime juice."]},
+  {id:21,emoji:"🥜",title:"Peanut butter & banana rice cakes",cat:"Snack",time:"5 min",
+    ingredients:[
+      {name:"Rice cakes",metric:"3",cups:"3",status:"safe"},
+      {name:"Peanut butter",metric:"30g",cups:"2 tbsp",status:"safe"},
+      {name:"Banana, firm",metric:"½ banana",cups:"½ banana",status:"safe"},
+      {name:"Chia seeds",metric:"5g",cups:"1 tsp",status:"safe"}],
+    desc:"The ultimate 5-minute FODMAP snack. Crunchy, creamy and satisfying.",
+    steps:["Spread peanut butter generously on each rice cake.","Top with banana slices.","Sprinkle with chia seeds and a pinch of cinnamon if desired."]},
+  {id:22,emoji:"🫐",title:"Berry & yoghurt parfait",cat:"Snack",time:"5 min",
+    ingredients:[
+      {name:"Lactose-free yoghurt",metric:"150g",cups:"⅔ cup",status:"safe"},
+      {name:"Strawberries",metric:"90g (6 berries)",cups:"6 berries",status:"safe"},
+      {name:"Blueberries",metric:"45g (15 berries)",cups:"15 berries",status:"safe"},
+      {name:"Raspberries",metric:"25g (8 berries)",cups:"8 berries",status:"safe"},
+      {name:"Maple syrup",metric:"5ml",cups:"1 tsp",status:"safe"},
+      {name:"Pumpkin seeds",metric:"10g",cups:"1 tbsp",status:"safe"}],
+    desc:"Layered berry parfait with lactose-free yoghurt. Beautiful and ready in 5 minutes.",
+    steps:["Spoon half the yoghurt into a glass.","Add half the berries.","Repeat layers.","Drizzle maple syrup, top with pumpkin seeds."]},
+  {id:23,emoji:"🍿",title:"Maple cinnamon popcorn",cat:"Snack",time:"10 min",
+    ingredients:[
+      {name:"Popcorn kernels",metric:"50g",cups:"¼ cup",status:"safe"},
+      {name:"Olive oil",metric:"15ml",cups:"1 tbsp",status:"safe"},
+      {name:"Maple syrup",metric:"30ml",cups:"2 tbsp",status:"safe"},
+      {name:"Cinnamon",metric:"1g",cups:"½ tsp",status:"safe"},
+      {name:"Salt",metric:"pinch",cups:"pinch",status:"safe"}],
+    desc:"A naturally sweet and satisfying snack. Great for movie nights.",
+    steps:["Heat oil in a large pot, add kernels.","Pop with lid on over medium-high heat, shaking occasionally.","Remove from heat, drizzle with maple syrup.","Sprinkle cinnamon and a pinch of salt. Toss well."]},
+  {id:24,emoji:"🥚",title:"Devilled eggs",cat:"Snack",time:"20 min",
+    ingredients:[
+      {name:"Eggs",metric:"6",cups:"6",status:"safe"},
+      {name:"Mayonnaise",metric:"30g",cups:"2 tbsp",status:"safe"},
+      {name:"Mustard",metric:"5g",cups:"1 tsp",status:"safe"},
+      {name:"Paprika",metric:"pinch",cups:"pinch",status:"safe"},
+      {name:"Salt & pepper",metric:"to taste",cups:"to taste",status:"safe"}],
+    desc:"Classic devilled eggs — a protein-packed party snack with zero FODMAPs.",
+    steps:["Boil eggs 10 min, cool in ice water.","Peel and halve lengthways.","Scoop yolks into a bowl, mash with mayo, mustard, salt, pepper.","Pipe or spoon filling back into whites.","Dust with paprika and serve."]},
 ];
 
 const cats=["All","Breakfast","Lunch","Dinner","Snack"];
@@ -303,11 +530,41 @@ function filterRecipes(q){
   renderRecipes(list);
 }
 
+let unitMode = 'metric';
+
 function openRecipe(r){
-  const ingRows=r.ingredients.map(i=>`<div class="ing-row"><span>${i.name}</span><span class="dot dot-${i.status}"></span></div>`).join("");
-  const steps=r.steps.map((s,i)=>`<li><span class="step-n">${i+1}</span><span>${s}</span></li>`).join("");
-  document.getElementById("modal-content").innerHTML=`<div class="modal-emoji">${r.emoji}</div><div class="modal-title">${r.title}</div><div class="modal-desc">${r.desc}</div><div style="display:flex;gap:8px;margin-bottom:1rem"><span class="badge badge-safe">${r.cat}</span><span class="badge" style="background:var(--bg2);color:var(--text2)">${r.time}</span></div><div class="section-label">Ingredients</div>${ingRows}<div class="section-label">Method</div><ol class="steps">${steps}</ol><div class="legend"><span><span class="dot dot-safe"></span>Safe</span><span><span class="dot dot-caution"></span>Caution / portion</span><span><span class="dot dot-avoid"></span>Avoid</span></div>`;
   document.getElementById("modal").classList.add("open");
+  renderRecipeModal(r, unitMode);
+}
+
+function renderRecipeModal(r, mode){
+  const ingRows=r.ingredients.map(i=>`<div class="ing-row"><span>${i.name}<span style="color:var(--text2);margin-left:6px">${mode==='metric'?i.metric:i.cups}</span></span><span class="dot dot-${i.status}"></span></div>`).join("");
+  const steps=r.steps.map((s,i)=>`<li><span class="step-n">${i+1}</span><span>${s}</span></li>`).join("");
+  document.getElementById("modal-content").innerHTML=`
+    <div class="modal-emoji">${r.emoji}</div>
+    <div class="modal-title">${r.title}</div>
+    <div class="modal-desc">${r.desc}</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+      <div style="display:flex;gap:8px">
+        <span class="badge badge-safe">${r.cat}</span>
+        <span class="badge" style="background:var(--bg2);color:var(--text2)">${r.time}</span>
+      </div>
+      <div style="display:flex;gap:4px;background:var(--bg2);border-radius:20px;padding:3px">
+        <button onclick="setUnit('metric','${r.id}')" id="btn-metric" style="padding:4px 12px;border-radius:16px;border:none;font-size:12px;font-weight:500;cursor:pointer;background:${mode==='metric'?'var(--bg)':'transparent'};color:${mode==='metric'?'var(--green)':'var(--text2)'}">Metric</button>
+        <button onclick="setUnit('cups','${r.id}')" id="btn-cups" style="padding:4px 12px;border-radius:16px;border:none;font-size:12px;font-weight:500;cursor:pointer;background:${mode==='cups'?'var(--bg)':'transparent'};color:${mode==='cups'?'var(--green)':'var(--text2)'}">Cups</button>
+      </div>
+    </div>
+    <div class="section-label">Ingredients</div>${ingRows}
+    <div class="section-label">Method</div>
+    <ol class="steps">${steps}</ol>
+    <div class="legend"><span><span class="dot dot-safe"></span>Safe</span><span><span class="dot dot-caution"></span>Caution / portion</span><span><span class="dot dot-avoid"></span>Avoid</span></div>`;
+  document.getElementById("modal")._recipe = r;
+}
+
+function setUnit(mode, recipeId){
+  unitMode = mode;
+  const r = recipes.find(x=>x.id==recipeId);
+  if(r) renderRecipeModal(r, mode);
 }
 
 function closeModal(){document.getElementById("modal").classList.remove("open");}
@@ -350,6 +607,13 @@ function switchTab(t,btn){
   document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
   document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
   document.getElementById(t).classList.add("active");btn.classList.add("active");
+}
+
+function unlockChecker(){
+  // In production this would trigger a payment flow.
+  // For now, simulate unlock for demo purposes.
+  document.getElementById("checker-locked").style.display="none";
+  document.getElementById("checker-unlocked").style.display="block";
 }
 
 init();
