@@ -524,9 +524,75 @@ const recipes = [
       {name:"Salt & pepper",metric:"to taste",cups:"to taste",status:"safe"}],
     desc:"Classic devilled eggs — a protein-packed party snack with zero FODMAPs.",
     steps:["Boil eggs 10 min, cool in ice water.","Peel and halve lengthways.","Scoop yolks into a bowl, mash with mayo, mustard, salt, pepper.","Pipe or spoon filling back into whites.","Dust with paprika and serve."]},
+
+  // ── NYT Classics ────────────────────────────────────────────────────────────
+  {id:25,emoji:"🍗",title:"Buttermilk-brined roast chicken",cat:"NYT Classics",time:"1 hr 15 min + 24h brine",
+    ingredients:[
+      {name:"Whole chicken (~1.5 kg)",metric:"1",cups:"1",status:"safe"},
+      {name:"Lactose-free buttermilk",metric:"480ml",cups:"2 cups",status:"safe"},
+      {name:"Garlic-infused olive oil",metric:"30ml",cups:"2 tbsp",status:"safe"},
+      {name:"Kosher salt",metric:"1 tbsp",cups:"1 tbsp",status:"safe"},
+      {name:"Black pepper",metric:"1 tsp",cups:"1 tsp",status:"safe"},
+      {name:"Smoked paprika",metric:"1 tsp",cups:"1 tsp",status:"safe"},
+      {name:"Lemon zest",metric:"1 lemon",cups:"1 lemon",status:"safe"},
+      {name:"Fresh thyme sprigs",metric:"to taste",cups:"to taste",status:"safe"}],
+    desc:"The NYT's #1 most popular recipe — a deeply flavourful roast chicken brined in tangy buttermilk. Adapted with garlic-infused oil and lactose-free buttermilk. Swap note: use garlic-infused oil (not whole garlic) — fructans don't transfer into oil.",
+    steps:["Whisk together lactose-free buttermilk, garlic-infused oil, salt, pepper, paprika and lemon zest in a large bowl or zip-lock bag.","Submerge the chicken in the brine. Refrigerate for at least 8 hours, ideally 24. Turn once halfway if possible.","Remove chicken from fridge 1 hour before roasting. Preheat oven to 230°C / 450°F (210°C fan).","Shake off excess brine. Place chicken breast-side up in a roasting tray. Tuck thyme sprigs underneath and drizzle with a little extra garlic-infused oil.","Roast 20 minutes at high heat, then reduce to 190°C / 375°F and continue 50–55 minutes, until juices run clear and the thigh reaches 74°C / 165°F internally.","Rest 10 minutes before carving. Serve with roasted potatoes or a simple green salad."]},
+
+  {id:26,emoji:"🍞",title:"No-knead bread",cat:"NYT Classics",time:"45 min + 14–20h rest",
+    ingredients:[
+      {name:"White wheat flour (or GF 1:1 blend)",metric:"430g",cups:"3½ cups",status:"caution"},
+      {name:"Instant yeast",metric:"¼ tsp",cups:"¼ tsp",status:"safe"},
+      {name:"Salt",metric:"1½ tsp",cups:"1½ tsp",status:"safe"},
+      {name:"Warm water",metric:"345ml",cups:"1½ cups",status:"safe"}],
+    desc:"Jim Lahey's legendary 4-ingredient overnight loaf. The long fermentation (12–18 hrs) naturally reduces fructan content in wheat, making it significantly more gut-friendly than standard bread. Use a GF 1:1 flour blend to remove wheat entirely. Portion: 1–2 slices per sitting.",
+    steps:["Mix flour, yeast and salt in a large bowl. Add water and stir until a shaggy, sticky dough forms. No kneading needed.","Cover with cling film or a plate. Leave at room temperature for 12–18 hours. The long fermentation significantly breaks down fructans in the wheat.","When dough is bubbly and well risen, turn out onto a well-floured surface. Fold over itself once or twice and shape into a rough ball.","Place on a floured tea towel, cover and rest 2 hours. Meanwhile, place a lidded Dutch oven in the oven and preheat to 240°C / 465°F for 30 minutes.","Carefully drop dough into the hot Dutch oven. Bake with lid on for 30 minutes, then remove lid and bake 15 more minutes until deep golden and hollow when tapped.","Cool on a wire rack for at least 20 minutes before slicing."]},
+
+  {id:27,emoji:"🍝",title:"Spaghetti alla carbonara",cat:"NYT Classics",time:"20 min",
+    ingredients:[
+      {name:"Spaghetti (or GF spaghetti)",metric:"150g",cups:"5 oz",status:"caution"},
+      {name:"Pancetta or guanciale, diced",metric:"120g",cups:"4 oz",status:"safe"},
+      {name:"Large eggs",metric:"2",cups:"2",status:"safe"},
+      {name:"Egg yolks",metric:"2",cups:"2",status:"safe"},
+      {name:"Pecorino Romano, finely grated",metric:"50g",cups:"½ cup",status:"safe"},
+      {name:"Parmesan, finely grated",metric:"30g",cups:"⅓ cup",status:"safe"},
+      {name:"Freshly cracked black pepper",metric:"generous",cups:"generous",status:"safe"},
+      {name:"Salt (pasta water only)",metric:"to taste",cups:"to taste",status:"safe"}],
+    desc:"A Roman classic — one of the most naturally low-FODMAP pasta dishes you can make. No garlic, no onion. Pecorino and Parmesan are aged hard cheeses with negligible lactose. Limit wheat pasta to 75g dry per person, or use GF pasta freely.",
+    steps:["Whisk eggs, yolks, Pecorino and Parmesan together in a bowl. Season very generously with black pepper. Set aside.","Cook pancetta in a cold pan over medium heat, rendering fat slowly until crispy. Remove pan from heat.","Cook spaghetti in well-salted boiling water until al dente. Reserve 120ml / ½ cup pasta water before draining.","Add hot drained pasta to the pan with pancetta (off the heat). Toss well to coat in the fat.","Pour in the egg mixture, tossing constantly while adding pasta water a splash at a time until the sauce is glossy and silky. The residual heat cooks the eggs — do not return to direct flame.","Serve immediately with extra Pecorino and cracked black pepper."]},
+
+  {id:28,emoji:"🥗",title:"Sheet-pan chicken with arugula & garlic yogurt",cat:"NYT Classics",time:"40 min + 1h marinate",
+    ingredients:[
+      {name:"Bone-in chicken thighs",metric:"800g",cups:"1¾ lb",status:"safe"},
+      {name:"Baby potatoes, halved",metric:"500g",cups:"1 lb",status:"safe"},
+      {name:"Garlic-infused olive oil",metric:"30ml",cups:"2 tbsp",status:"safe"},
+      {name:"Harissa paste (garlic-free brand)",metric:"1–2 tsp",cups:"1–2 tsp",status:"caution"},
+      {name:"Ground cumin",metric:"1 tsp",cups:"1 tsp",status:"safe"},
+      {name:"Smoked paprika",metric:"1 tsp",cups:"1 tsp",status:"safe"},
+      {name:"Salt and black pepper",metric:"to taste",cups:"to taste",status:"safe"},
+      {name:"Rocket / arugula",metric:"60g",cups:"2 cups",status:"safe"},
+      {name:"Lemon juice",metric:"½ lemon",cups:"½ lemon",status:"safe"},
+      {name:"Lactose-free Greek yogurt",metric:"150g",cups:"⅔ cup",status:"safe"},
+      {name:"Garlic-infused oil (for yogurt sauce)",metric:"15ml",cups:"1 tbsp",status:"safe"}],
+    desc:"Melissa Clark's fan-favourite one-pan dinner. Spiced chicken thighs with crispy potatoes, tangy garlic yogurt and fresh rocket. Swap note: use garlic-infused oil (not whole garlic) and lactose-free Greek yogurt. Check harissa label — many brands contain garlic paste.",
+    steps:["Mix garlic-infused oil, harissa, cumin, paprika, salt and pepper. Toss chicken thighs and potatoes in the marinade. Rest at least 1 hour, or overnight in the fridge.","Preheat oven to 220°C / 430°F. Spread chicken and potatoes in a single layer on a large baking sheet, skin-side up.","Roast 35–40 minutes until chicken skin is deeply golden and potatoes are crispy at the edges. Internal temp of chicken should reach 74°C / 165°F.","While chicken roasts, whisk together lactose-free yogurt, garlic-infused oil, lemon juice and a pinch of salt. Taste and adjust.","Toss rocket with a squeeze of lemon and a drizzle of garlic-infused oil.","Spread yogurt sauce on a serving platter. Arrange chicken and potatoes on top, then pile rocket over. Serve immediately."]},
+
+  {id:29,emoji:"🫐",title:"Original plum torte",cat:"NYT Classics",time:"50 min",
+    ingredients:[
+      {name:"Caster sugar",metric:"150g",cups:"¾ cup",status:"safe"},
+      {name:"Unsalted butter, softened",metric:"115g",cups:"½ cup",status:"safe"},
+      {name:"Plain flour (or GF 1:1 blend)",metric:"130g",cups:"1 cup",status:"caution"},
+      {name:"Baking powder",metric:"1 tsp",cups:"1 tsp",status:"safe"},
+      {name:"Salt",metric:"pinch",cups:"pinch",status:"safe"},
+      {name:"Eggs",metric:"2 large",cups:"2 large",status:"safe"},
+      {name:"Italian plums, halved & stoned",metric:"5–6",cups:"5–6",status:"caution"},
+      {name:"Ground cinnamon",metric:"1 tsp",cups:"1 tsp",status:"safe"},
+      {name:"Lemon juice",metric:"15ml",cups:"1 tbsp",status:"safe"}],
+    desc:"Marian Burros's legendary 1983 cake — one of the most requested recipes in NYT history. Remarkably close to FODMAP-friendly in its original form. Swap flour to GF 1:1 if needed. Plums are safe at 1 medium per serving — slice into 8 pieces to stay within threshold.",
+    steps:["Preheat oven to 180°C / 350°F. Lightly grease and flour a 23cm / 9-inch springform tin, or line with baking paper.","Beat butter and sugar together until pale and fluffy, about 3–4 minutes.","Add eggs one at a time, beating well after each addition. Mix in lemon juice.","Fold in flour, baking powder and salt until just combined. Do not overmix.","Pour batter into the tin and smooth the top. Press plum halves cut-side down into the batter in a single layer. Dust generously with cinnamon and a little extra sugar.","Bake 45–50 minutes until a skewer comes out clean and the top is golden. Cool in the tin 10 minutes before releasing. Serve warm or at room temperature. Slice into 8 pieces."]},
 ];
 
-const cats=["All","Breakfast","Lunch","Dinner","Snack"];
+const cats=["All","Breakfast","Lunch","Dinner","Snack","NYT Classics"];
 let activeCat="All",libFilter="all";
 
 function init(){
