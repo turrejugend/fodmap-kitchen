@@ -1,4 +1,4 @@
-const CACHE = 'gut-friendly-v1';
+const CACHE = 'gut-friendly-v2';
 const FILES = [
   '/app.html',
   '/manifest.json',
