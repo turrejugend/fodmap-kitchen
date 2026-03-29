@@ -96,8 +96,8 @@
 
   <div class="tabs">
     <button class="tab active" onclick="switchTab('recipes',this)">Recipes</button>
-    <button class="tab" onclick="switchTab('checker',this)">Ingredient checker</button>
-    <button class="tab" onclick="switchTab('library',this)">Ingredient library</button>
+    <button class="tab" onclick="switchTab('checker',this)">Checker <span style="font-size:10px;background:var(--green);color:white;padding:1px 5px;border-radius:6px;margin-left:2px;vertical-align:middle">⭐</span></button>
+    <button class="tab" onclick="switchTab('library',this)">Library <span style="font-size:10px;background:var(--green);color:white;padding:1px 5px;border-radius:6px;margin-left:2px;vertical-align:middle">⭐</span></button>
   </div>
 
   <div id="recipes" class="section active">
@@ -122,15 +122,24 @@
   </div>
 
   <div id="library" class="section">
-    <input class="search-bar" placeholder="Search ingredients..." oninput="filterLibrary(this.value)" id="lib-search">
-    <div class="filters">
-      <button class="filter-btn active" onclick="setLibFilter('all',this)">All</button>
-      <button class="filter-btn" onclick="setLibFilter('safe',this)">Safe</button>
-      <button class="filter-btn" onclick="setLibFilter('caution',this)">Caution</button>
-      <button class="filter-btn" onclick="setLibFilter('avoid',this)">Avoid</button>
+    <div id="library-locked" style="background:var(--bg);border:1.5px solid var(--green);border-radius:var(--radius);padding:2rem;text-align:center;margin-bottom:1rem">
+      <div style="font-size:32px;margin-bottom:12px">📋</div>
+      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px">Ingredient library</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:1.25rem">Browse and filter 90+ ingredients by FODMAP status — organised by category with detailed portion guidance.<br><br>This is a <strong>Premium</strong> feature.</div>
+      <div style="background:var(--green);color:white;display:inline-block;padding:10px 24px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:8px" onclick="unlockPremium()">Unlock for €1.99</div>
+      <div style="font-size:11px;color:var(--text3)">One-time payment · No subscription · Unlocks checker too</div>
     </div>
-    <div class="lib-count" id="lib-count"></div>
-    <div id="lib-list"></div>
+    <div id="library-unlocked" style="display:none">
+      <input class="search-bar" placeholder="Search ingredients..." oninput="filterLibrary(this.value)" id="lib-search">
+      <div class="filters">
+        <button class="filter-btn active" onclick="setLibFilter('all',this)">All</button>
+        <button class="filter-btn" onclick="setLibFilter('safe',this)">Safe</button>
+        <button class="filter-btn" onclick="setLibFilter('caution',this)">Caution</button>
+        <button class="filter-btn" onclick="setLibFilter('avoid',this)">Avoid</button>
+      </div>
+      <div class="lib-count" id="lib-count"></div>
+      <div id="lib-list"></div>
+    </div>
   </div>
 
   <footer>Based on Monash University FODMAP guidelines. Always consult your dietitian for personal advice.</footer>
@@ -609,12 +618,16 @@ function switchTab(t,btn){
   document.getElementById(t).classList.add("active");btn.classList.add("active");
 }
 
-function unlockChecker(){
-  // In production this would trigger a payment flow.
+function unlockPremium(){
+  // In production this triggers the payment flow (e.g. Lemon Squeezy).
   // For now, simulate unlock for demo purposes.
   document.getElementById("checker-locked").style.display="none";
   document.getElementById("checker-unlocked").style.display="block";
+  document.getElementById("library-locked").style.display="none";
+  document.getElementById("library-unlocked").style.display="block";
 }
+
+function unlockChecker(){ unlockPremium(); }
 
 init();
 </script>
