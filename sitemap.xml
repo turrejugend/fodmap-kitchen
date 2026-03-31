@@ -1,63 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Core pages -->
   <url>
     <loc>https://gutfriendly.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- FODMAP ingredient pages -->
-  <url>
-    <loc>https://gutfriendly.app/fodmap/garlic/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://gutfriendly.app/fodmap/onion/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://gutfriendly.app/fodmap/avocado/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://gutfriendly.app/fodmap/oat-milk/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://gutfriendly.app/fodmap/eggs/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://gutfriendly.app/fodmap/quinoa/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://gutfriendly.app/fodmap/rice/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://gutfriendly.app/fodmap/blueberries/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://gutfriendly.app/fodmap/sourdough/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://gutfriendly.app/fodmap/dark-chocolate/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <url><loc>https://gutfriendly.app/fodmap/garlic/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/fodmap/onion/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/fodmap/avocado/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/fodmap/oat-milk/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/fodmap/eggs/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/fodmap/quinoa/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/fodmap/rice/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/fodmap/blueberries/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/fodmap/sourdough/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/fodmap/dark-chocolate/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <url><loc>https://gutfriendly.app/recipes/low-fodmap-carbonara/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/recipes/low-fodmap-roast-chicken/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/recipes/low-fodmap-no-knead-bread/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/recipes/low-fodmap-sheet-pan-chicken/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://gutfriendly.app/recipes/low-fodmap-plum-torte/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
 </urlset>
